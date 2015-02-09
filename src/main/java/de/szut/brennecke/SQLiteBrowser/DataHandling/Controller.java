@@ -1,8 +1,6 @@
 package de.szut.brennecke.SQLiteBrowser.DataHandling;
 
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.sql.ResultSet;
 import java.util.ArrayList;
