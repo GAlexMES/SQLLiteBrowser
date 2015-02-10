@@ -50,7 +50,6 @@ public class Controller {
 		SQLConnection sqlCon = sqlConnections.get(database);
 		String query = "Select * from " + table;
 		ResultSet rs = sqlCon.sendQuery(query);
-		System.out.println("open Table");
 		guiController.showQuery(rs);
 		lastShowQuery = query;
 	}
