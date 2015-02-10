@@ -50,6 +50,7 @@ public class Controller {
 		SQLConnection sqlCon = sqlConnections.get(database);
 		String query = "Select * from " + table;
 		ResultSet rs = sqlCon.sendQuery(query);
+		System.out.println("open Table");
 		guiController.showQuery(rs);
 		lastShowQuery = query;
 	}
@@ -59,10 +60,20 @@ public class Controller {
 		sendQuery(query);
 	}
 
+	public void sendGUIQuery(int[] limitValues) {
+		String query = guiController.getQuery();
+		String startLimit = " LIMIT "+limitValues[1];
+		String numberOfValues = " OFFSET "+limitValues[0];
+		query = query +startLimit+numberOfValues;
+		sendQuery(query);
+	}
+	
 	public void setWrongQueryFlag(Boolean flag) {
 		wrongQueryFlag = flag;
 	}
 
+	
+	
 	public void sendQuery(String query) {
 		String sqlConName = guiController.getChosenDatabase();
 		SQLConnection sqlCon = getSQLConnection(sqlConName);
@@ -70,6 +81,7 @@ public class Controller {
 			ResultSet rs = sqlCon.sendQuery(query);
 			if (!wrongQueryFlag) {
 				if (rs == null) {
+					System.out.println("last");
 					rs = sqlCon.sendQuery(lastShowQuery);
 				} else {
 					lastShowQuery = query;
@@ -90,5 +102,7 @@ public class Controller {
 		ArrayList<SQLConnection> sqlConnectionsList = new ArrayList<>(sqlConnections.values());
 		return sqlConnectionsList;
 	}
+
+	
 
 }

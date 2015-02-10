@@ -2,10 +2,13 @@ package de.szut.brennecke.SQLiteBrowser.GUI;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -16,6 +19,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -134,17 +139,86 @@ public class GUIGenerator {
 		
 		querryPane.add(textScrollPane,c);
 		
+		
+		//////////
+		//LIMIT
+		//////////
+		
+		JPanel limitPane = new JPanel(new GridBagLayout());
+		GridBagConstraints limitPaneC = new GridBagConstraints();
+		limitPaneC.fill = GridBagConstraints.HORIZONTAL;
+		
+		//LIMIT CHECK BOX
+		final JCheckBox limitCheck = new JCheckBox();
+		limitPaneC.gridy = 0;
+		limitPane.add(limitCheck, limitPaneC);
+		
+		//LIMIT TEXT FIELD
+		JTextPane limitText = new JTextPane();
+		limitText.setText("Limit");
+		limitPaneC.gridx = 1;
+		limitPane.add(limitText, limitPaneC);
+		
+		//LIMIT START VALUE FIELD
+		JTextPane limitStartText = new JTextPane();
+		limitStartText.setText("start value");
+		limitPaneC.gridx = 2;
+		limitPane.add(limitStartText, limitPaneC);
+		
+		//LIMIT START VALUE INPUT FIELD
+		final JTextField limitStartInputField = new JTextField();
+		limitStartInputField.setText("0");
+		limitPaneC.gridx = 3;
+		limitPaneC.ipadx = 20;
+		limitPane.add(limitStartInputField, limitPaneC);
+		limitPaneC.ipadx = 0;
+		
+		//LIMIT START VALUE FIELD
+		JTextPane limitNumberText = new JTextPane();
+		limitNumberText.setText("number of entrys ('0'||''==all)");
+		limitPaneC.gridx = 4;
+		limitPane.add(limitNumberText, limitPaneC);
+		
+		//LIMIT START VALUE INPUT FIELD
+		final JTextField limitNumberInputField = new JTextField();
+		limitNumberInputField.setText("0");
+		limitPaneC.ipadx = 20;
+		limitPaneC.gridx = 5;
+		limitPane.add(limitNumberInputField, limitPaneC);
+		limitPaneC.ipadx = 0;
+		
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.0;
+		c.gridy = 2;
+		c.anchor = GridBagConstraints.PAGE_END;
+
+		querryPane.add(limitPane,c);
+		
 		//////////
 		//BUTTON
 		//////////
 		
 		JButton executeButton = new JButton("execute");
-//		executeButton.setSize(scrollPaneTable.getX(), scrollPaneTable.getY());
-		executeButton.addActionListener(new GUIKeyListener(mainFrame));
+		executeButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(limitCheck.isSelected()){
+					int startValue = Integer.valueOf(limitStartInputField.getText());
+					int numberOfValues = Integer.valueOf(limitNumberInputField.getText());
+					int[] limitValues = {startValue, numberOfValues};
+					mainFrame.getGUIController().getController().sendGUIQuery(limitValues);		
+				}
+				else{
+				mainFrame.getGUIController().getController().sendGUIQuery();
+				}
+			}
+		});
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.0;
-		c.gridy = 2;
+		c.gridy = 3;
 		c.anchor = GridBagConstraints.PAGE_END;
 
 		querryPane.add(executeButton,c);

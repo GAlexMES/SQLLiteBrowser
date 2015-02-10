@@ -56,6 +56,7 @@ public class SQLConnection {
 	}
 
 	public ResultSet sendQuery(String command) {
+		System.out.println(command);
 		ResultSet currentSet = null;
 		try {
 			currentSet = statement.executeQuery(command);
