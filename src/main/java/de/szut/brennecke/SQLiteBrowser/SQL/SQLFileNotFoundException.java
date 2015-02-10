@@ -1,5 +1,6 @@
 package de.szut.brennecke.SQLiteBrowser.SQL;
 
+@SuppressWarnings("serial")
 public class SQLFileNotFoundException extends Exception
 {
 	public SQLFileNotFoundException(){

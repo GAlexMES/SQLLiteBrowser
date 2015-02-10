@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import de.szut.brennecke.SQLiteBrowser.DataHandling.FrameProperties;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
+@SuppressWarnings("serial")
 public class GUI extends JFrame{
+
 	private	GUIController guiController;
 	
 	public GUI(GUIController guiController) {

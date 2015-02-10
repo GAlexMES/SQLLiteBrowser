@@ -3,8 +3,6 @@ package de.szut.brennecke.SQLiteBrowser.GUI;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
@@ -14,7 +12,6 @@ import javax.swing.tree.TreePath;
 public class TreeListener implements TreeSelectionListener, MouseListener {
 
 	private GUIController guiController;
-	private Boolean databaseClicked = false;
 	private PopupMenu popupMenu;
 	public TreeListener(GUI gui) {
 		this.guiController = gui.getGUIController();
@@ -23,7 +20,6 @@ public class TreeListener implements TreeSelectionListener, MouseListener {
 
 	@Override
 	public void valueChanged(TreeSelectionEvent arg0) {
-		databaseClicked = true;
 		TreePath treePath = ((JTree) arg0.getSource()).getSelectionPath();
 		if (treePath != null) {
 			if (treePath.getPathCount() == 3) {

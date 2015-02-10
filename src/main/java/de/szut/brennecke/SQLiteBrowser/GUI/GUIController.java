@@ -13,12 +13,11 @@ import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
 
 public class GUIController {
 	private GUI gui;
-	private static Controller controller;
+	private static Controller controller = null;
 	private FrameProperties frameProperties = new FrameProperties();
 
 	public GUIController(Controller controller) {
-		this.controller = controller;
-
+		GUIController.controller = controller;
 		gui = new GUI(this);
 		gui.setSize(frameProperties.getMainFrameWidth(), frameProperties.getMainFrameHeight());
 		gui.setLocation(frameProperties.getMainFrameLocationX(), frameProperties.getMainFrameLocationY());
@@ -31,7 +30,6 @@ public class GUIController {
 			}
 		});
 
-		(new Thread(new Resizer(gui))).start();
 	}
 
 	private void setFrameProperties() {
@@ -63,7 +61,7 @@ public class GUIController {
 	}
 
 	public Controller getController() {
-		return this.controller;
+		return GUIController.controller;
 	}
 
 	public String getChosenDatabase() {
