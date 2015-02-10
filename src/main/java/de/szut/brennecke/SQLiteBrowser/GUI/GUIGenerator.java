@@ -1,6 +1,5 @@
 package de.szut.brennecke.SQLiteBrowser.GUI;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.sql.ResultSet;
@@ -97,154 +96,80 @@ public class GUIGenerator {
 	}
 
 	public static void updateMainFrame(final GUI mainFrame) {
-//		JSplitPane splitPane;
-//		if (scrollPaneTable != null) {
-//		JPanel querryPane = new JPanel();
-//		querryPane.setSize(scrollPaneTable.getX(), scrollPaneTable.getY());
-//		querryPane.setLayout(new GridBagLayout());
-//		GridBagConstraints c = new GridBagConstraints();
-//
-////		Dimension buttonMaxDim = new Dimension(scrollPaneTable.getWidth(), 40);
-//
-//		databaseComboBox = new JComboBox<>();
-////		databaseComboBox.setPreferredSize(buttonMaxDim);
-//		ArrayList<SQLConnection> sqlCons = mainFrame.getGUIController().getController().getSqlConnections();
-//
-//		for (SQLConnection sqlCon : sqlCons) {
-//			databaseComboBox.addItem(sqlCon.getName());
-//		}
-//
-//		c.fill = GridBagConstraints.HORIZONTAL;
-//		c.weightx = 0.0;
-//		c.weighty = 1.0;
-//		c.gridx = 0;
-//		c.gridy = 0;
-//		c.anchor = GridBagConstraints.PAGE_START;
-//
-//		querryPane.add(databaseComboBox,c);
-//		
-//		JComboBox co = databaseComboBox;
-//		c.gridx = 1;
-//		querryPane.add(co,c);
-//		
-//		JButton executeButton = new JButton("execute");
-//		executeButton.setSize(scrollPaneTable.getX(), scrollPaneTable.getY());
-//		executeButton.setPreferredSize(buttonMaxDim);
-//		executeButton.addActionListener(new GUIKeyListener(mainFrame));
-//
-//		c.fill = GridBagConstraints.HORIZONTAL;
-//		c.weightx = 0.0;
-//		c.weighty = 1.0;
-//		c.gridx = 0;
-//		c.gridy = 1;
-//		c.anchor = GridBagConstraints.PAGE_END;
-//
-//		querryPane.add(executeButton,c);
-//		int selectedIndex = tabbedPane.getSelectedIndex();
-//
-//		tabbedPane.removeAll();
-//		tabbedPane.addTab("Tabelle", scrollPaneTable);
-//		tabbedPane.addTab("Query", querryPane);
-//
-//		if (selectedIndex == -1 || newQuerryReceived) {
-//			tabbedPane.setSelectedIndex(0);
-//			newQuerryReceived = false;
-//		} else {
-//			tabbedPane.setSelectedIndex(selectedIndex);
-//		}
-//		}
-//		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, tabbedPane);
-//		mainFrame.getContentPane().removeAll();
-//		mainFrame.getContentPane().add(splitPane);
-//		mainFrame.validate();
-//		mainFrame.repaint();
+		JSplitPane splitPane;
+		if (scrollPaneTable != null) {
+		JPanel querryPane = new JPanel();
+		querryPane.setSize(scrollPaneTable.getX(), scrollPaneTable.getY());
+		querryPane.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 
-		 JSplitPane splitPane;
-		 if (scrollPaneTable != null) {
-		 Dimension buttonMaxDim = new Dimension(scrollPaneTable.getWidth(),
-		 40);
 		
-		 JButton executeButton = new JButton("execute");
-		 executeButton.setPreferredSize(buttonMaxDim);
-		 executeButton.addActionListener(new GUIKeyListener(mainFrame));
+		//////////
+		//COMBOBOX
+		//////////
+		databaseComboBox = new JComboBox<>();
+		ArrayList<SQLConnection> sqlCons = mainFrame.getGUIController().getController().getSqlConnections();
+
+		for (SQLConnection sqlCon : sqlCons) {
+			databaseComboBox.addItem(sqlCon.getName());
+		}
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0;
+		c.weighty = 0.0;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.PAGE_START;
+
+		querryPane.add(databaseComboBox,c);
 		
-		 JScrollPane scrollPane = new JScrollPane(textField);
-		 databaseComboBox = new JComboBox<>();
-		 databaseComboBox.setPreferredSize(buttonMaxDim);
-		 ArrayList<SQLConnection> sqlCons =
-		 mainFrame.getGUIController().getController().getSqlConnections();
+		//////////
+		//TEXTAREA
+		//////////
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 1.0;
+		c.gridy = 1;
 		
-		 for (SQLConnection sqlCon : sqlCons) {
-		 databaseComboBox.addItem(sqlCon.getName());
-		 }
+		JScrollPane textScrollPane = new JScrollPane(textField);
 		
-		 JSplitPane northernSplitPane = new
-		 JSplitPane(JSplitPane.VERTICAL_SPLIT) {
-		 private final int location = 35;
-		 {
-		 setDividerLocation(location);
-		 }
+		querryPane.add(textScrollPane,c);
 		
-		 @Override
-		 public int getDividerLocation() {
-		 return location;
-		 }
+		//////////
+		//BUTTON
+		//////////
 		
-		 @Override
-		 public int getLastDividerLocation() {
-		 return location;
-		 }
-		 };
+		JButton executeButton = new JButton("execute");
+//		executeButton.setSize(scrollPaneTable.getX(), scrollPaneTable.getY());
+		executeButton.addActionListener(new GUIKeyListener(mainFrame));
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weighty = 0.0;
+		c.gridy = 2;
+		c.anchor = GridBagConstraints.PAGE_END;
+
+		querryPane.add(executeButton,c);
 		
-		 northernSplitPane.setTopComponent(databaseComboBox);
-		 northernSplitPane.setBottomComponent(scrollPane);
-		
-		 @SuppressWarnings("serial")
-		 JSplitPane southernSplitPane = new
-		 JSplitPane(JSplitPane.VERTICAL_SPLIT) {
-		 private final int location = mainFrame.getHeight() - 150;
-		 {
-		 setDividerLocation(location);
-		 }
-		
-		 @Override
-		 public int getDividerLocation() {
-		 return location;
-		 }
-		
-		 @Override
-		 public int getLastDividerLocation() {
-		 return location;
-		 }
-		 };
-		
-		 southernSplitPane.setTopComponent(northernSplitPane);
-		 southernSplitPane.setBottomComponent(executeButton);
-		
-		 int selectedIndex = tabbedPane.getSelectedIndex();
-		
-		 tabbedPane.removeAll();
-		 tabbedPane.addTab("Tabelle", scrollPaneTable);
-		 tabbedPane.addTab("Query", southernSplitPane);
-		
-		 if (selectedIndex == -1 || newQuerryReceived) {
-		 tabbedPane.setSelectedIndex(0);
-		 newQuerryReceived = false;
-		 } else {
-		 tabbedPane.setSelectedIndex(selectedIndex);
-		 }
-		 splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-		 scrollPaneTree, tabbedPane);
-		
-		 } else {
-		 splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-		 scrollPaneTree, null);
-		 }
-		 splitPane.setDividerLocation(150);
-		 mainFrame.getContentPane().removeAll();
-		 mainFrame.getContentPane().add(splitPane);
-		 mainFrame.validate();
-		 mainFrame.repaint();
+		//////////
+		//TABBEDPANE
+		//////////
+		int selectedIndex = tabbedPane.getSelectedIndex();
+
+		tabbedPane.removeAll();
+		tabbedPane.addTab("Tabelle", scrollPaneTable);
+		tabbedPane.addTab("Query", querryPane);
+
+		if (selectedIndex == -1 || newQuerryReceived) {
+			tabbedPane.setSelectedIndex(0);
+			newQuerryReceived = false;
+		} else {
+			tabbedPane.setSelectedIndex(selectedIndex);
+		}
+		}
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, tabbedPane);
+		mainFrame.getContentPane().removeAll();
+		mainFrame.getContentPane().add(splitPane);
+		mainFrame.validate();
+		mainFrame.repaint();
 	}
 
 	public static void updateComponents() {
