@@ -9,6 +9,7 @@ import javax.swing.JPopupMenu;
 
 import de.szut.brennecke.SQLiteBrowser.DataHandling.Controller;
 
+@SuppressWarnings("serial")
 public class PopupMenu extends JPopupMenu {
 	String nameOfSelectedDatabase = "";
 	public PopupMenu(final GUI gui) {

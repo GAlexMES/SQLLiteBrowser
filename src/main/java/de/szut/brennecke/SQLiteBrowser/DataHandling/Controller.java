@@ -13,7 +13,6 @@ import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
 public class Controller {
 	DatabaseProperties dbProps = new DatabaseProperties();
 	GUIController guiController = new GUIController(this);
-	private String activeDatabase;
 	private String lastShowQuery = "";
 	private Map<String, SQLConnection> sqlConnections = new HashMap<String, SQLConnection>();
 	private Boolean wrongQueryFlag = false;
@@ -53,7 +52,6 @@ public class Controller {
 		ResultSet rs = sqlCon.sendQuery(query);
 		guiController.showQuery(rs);
 		lastShowQuery = query;
-		activeDatabase = database;
 	}
 
 	public void sendGUIQuery() {

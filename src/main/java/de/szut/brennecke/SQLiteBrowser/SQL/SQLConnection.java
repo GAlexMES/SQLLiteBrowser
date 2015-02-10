@@ -15,7 +15,6 @@ public class SQLConnection {
 	private Connection con = null;
 	private Statement statement = null;
 	private String name = "";
-	private ResultSet lastResult = null;
 
 	private ArrayList<String> tableNames = new ArrayList<String>();
 	

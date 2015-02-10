@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 
-import de.szut.brennecke.SQLiteBrowser.DataHandling.Controller;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
 
 public class MenuListener implements ActionListener {
