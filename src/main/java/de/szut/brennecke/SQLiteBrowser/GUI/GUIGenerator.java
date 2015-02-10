@@ -35,8 +35,10 @@ public class GUIGenerator {
 	private static JTabbedPane tabbedPane = new JTabbedPane();
 	private static Boolean newQuerryReceived = false;
 	private static JComboBox<String> databaseComboBox;
+	private static JPanel querryPane = new JPanel();
 
 	public static GUI generateEmptyGUI(GUI mainFrame) {
+		generateQueryTab(mainFrame);
 		mainFrame.setJMenuBar(generateMenu(mainFrame));
 		return mainFrame;
 	}
@@ -88,30 +90,14 @@ public class GUIGenerator {
 
 		return table;
 	}
-
-	public static void showQuery(GUI mainFrame, ResultSet rs) {
-		scrollPaneTable = new JScrollPane(generateJTable(rs));
-		newQuerryReceived = true;
-		updateMainFrame(mainFrame);
-
-	}
-
-	public static JTextArea getTextArea() {
-		return textField;
-	}
-
-	public static void updateMainFrame(final GUI mainFrame) {
-		JSplitPane splitPane;
-		if (scrollPaneTable != null) {
-		JPanel querryPane = new JPanel();
-		querryPane.setSize(scrollPaneTable.getX(), scrollPaneTable.getY());
+	
+	public static void generateQueryTab(final GUI mainFrame) {
 		querryPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		
-		//////////
-		//COMBOBOX
-		//////////
+		// ////////
+		// COMBOBOX
+		// ////////
 		databaseComboBox = new JComboBox<>();
 		ArrayList<SQLConnection> sqlCons = mainFrame.getGUIController().getController().getSqlConnections();
 
@@ -126,92 +112,89 @@ public class GUIGenerator {
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.PAGE_START;
 
-		querryPane.add(databaseComboBox,c);
-		
-		//////////
-		//TEXTAREA
-		//////////
+		querryPane.add(databaseComboBox, c);
+
+		// ////////
+		// TEXTAREA
+		// ////////
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1.0;
 		c.gridy = 1;
-		
+
 		JScrollPane textScrollPane = new JScrollPane(textField);
-		
-		querryPane.add(textScrollPane,c);
-		
-		
-		//////////
-		//LIMIT
-		//////////
-		
+
+		querryPane.add(textScrollPane, c);
+
+		// ////////
+		// LIMIT
+		// ////////
+
 		JPanel limitPane = new JPanel(new GridBagLayout());
 		GridBagConstraints limitPaneC = new GridBagConstraints();
 		limitPaneC.fill = GridBagConstraints.HORIZONTAL;
-		
-		//LIMIT CHECK BOX
+
+		// LIMIT CHECK BOX
 		final JCheckBox limitCheck = new JCheckBox();
 		limitPaneC.gridy = 0;
 		limitPane.add(limitCheck, limitPaneC);
-		
-		//LIMIT TEXT FIELD
+
+		// LIMIT TEXT FIELD
 		JTextPane limitText = new JTextPane();
 		limitText.setText("Limit");
 		limitPaneC.gridx = 1;
 		limitPane.add(limitText, limitPaneC);
-		
-		//LIMIT START VALUE FIELD
+
+		// LIMIT START VALUE FIELD
 		JTextPane limitStartText = new JTextPane();
 		limitStartText.setText("start value");
 		limitPaneC.gridx = 2;
 		limitPane.add(limitStartText, limitPaneC);
-		
-		//LIMIT START VALUE INPUT FIELD
+
+		// LIMIT START VALUE INPUT FIELD
 		final JTextField limitStartInputField = new JTextField();
 		limitStartInputField.setText("0");
 		limitPaneC.gridx = 3;
 		limitPaneC.ipadx = 20;
 		limitPane.add(limitStartInputField, limitPaneC);
 		limitPaneC.ipadx = 0;
-		
-		//LIMIT START VALUE FIELD
+
+		// LIMIT START VALUE FIELD
 		JTextPane limitNumberText = new JTextPane();
 		limitNumberText.setText("number of entrys ('0'||''==all)");
 		limitPaneC.gridx = 4;
 		limitPane.add(limitNumberText, limitPaneC);
-		
-		//LIMIT START VALUE INPUT FIELD
+
+		// LIMIT START VALUE INPUT FIELD
 		final JTextField limitNumberInputField = new JTextField();
 		limitNumberInputField.setText("0");
 		limitPaneC.ipadx = 20;
 		limitPaneC.gridx = 5;
 		limitPane.add(limitNumberInputField, limitPaneC);
 		limitPaneC.ipadx = 0;
-		
-		
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 0.0;
 		c.gridy = 2;
 		c.anchor = GridBagConstraints.PAGE_END;
 
-		querryPane.add(limitPane,c);
-		
-		//////////
-		//BUTTON
-		//////////
-		
+		querryPane.add(limitPane, c);
+
+		// ////////
+		// BUTTON
+		// ////////
+
 		JButton executeButton = new JButton("execute");
 		executeButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(limitCheck.isSelected()){
+				if (limitCheck.isSelected()) {
 					int startValue = Integer.valueOf(limitStartInputField.getText());
 					int numberOfValues = Integer.valueOf(limitNumberInputField.getText());
-					int[] limitValues = {startValue, numberOfValues};
-					mainFrame.getGUIController().getController().sendGUIQuery(limitValues);		
-				}
-				else{
-				mainFrame.getGUIController().getController().sendGUIQuery();
+					int[] limitValues = { startValue, numberOfValues };
+					mainFrame.getGUIController().getController().sendGUIQuery(limitValues);
+				} else {
+					mainFrame.getGUIController().getController().sendGUIQuery();
 				}
 			}
 		});
@@ -221,11 +204,16 @@ public class GUIGenerator {
 		c.gridy = 3;
 		c.anchor = GridBagConstraints.PAGE_END;
 
-		querryPane.add(executeButton,c);
-		
-		//////////
-		//TABBEDPANE
-		//////////
+		querryPane.add(executeButton, c);
+	}
+
+	public static void updateMainFrame(final GUI mainFrame) {
+		ArrayList<SQLConnection> sqlCons = mainFrame.getGUIController().getController().getSqlConnections();
+		updateComboBox(sqlCons);
+		JSplitPane splitPane;
+		// ////////
+		// TABBEDPANE
+		// ////////
 		int selectedIndex = tabbedPane.getSelectedIndex();
 
 		tabbedPane.removeAll();
@@ -238,7 +226,6 @@ public class GUIGenerator {
 		} else {
 			tabbedPane.setSelectedIndex(selectedIndex);
 		}
-		}
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, tabbedPane);
 		mainFrame.getContentPane().removeAll();
 		mainFrame.getContentPane().add(splitPane);
@@ -246,12 +233,26 @@ public class GUIGenerator {
 		mainFrame.repaint();
 	}
 
-	public static void updateComponents() {
-
-	}
-
 	public static String getChosenDatabase() {
 		return databaseComboBox.getSelectedItem().toString();
+	}
+	
+	private static void updateComboBox(ArrayList<SQLConnection> sqlCons){
+		databaseComboBox.removeAll();
+		databaseComboBox.removeAllItems();
+		for(SQLConnection sqlCon : sqlCons){
+			databaseComboBox.addItem(sqlCon.getName());
+		}
+	}
+	
+	public static void showQuery(GUI mainFrame, ResultSet rs) {
+		scrollPaneTable = new JScrollPane(generateJTable(rs));
+		newQuerryReceived = true;
+		updateMainFrame(mainFrame);
+	}
+
+	public static JTextArea getTextArea() {
+		return textField;
 	}
 
 }

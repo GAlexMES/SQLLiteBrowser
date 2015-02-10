@@ -71,8 +71,6 @@ public class Controller {
 	public void setWrongQueryFlag(Boolean flag) {
 		wrongQueryFlag = flag;
 	}
-
-	
 	
 	public void sendQuery(String query) {
 		String sqlConName = guiController.getChosenDatabase();
@@ -81,13 +79,11 @@ public class Controller {
 			ResultSet rs = sqlCon.sendQuery(query);
 			if (!wrongQueryFlag) {
 				if (rs == null) {
-					System.out.println("last");
 					rs = sqlCon.sendQuery(lastShowQuery);
 				} else {
 					lastShowQuery = query;
 				}
 				guiController.showQuery(rs);
-
 			}
 			wrongQueryFlag = false;
 		}
