@@ -17,6 +17,8 @@ public class Controller {
 	private Map<String, SQLConnection> sqlConnections = new HashMap<String, SQLConnection>();
 	private Boolean wrongQueryFlag = false;
 
+	private final int NUMBER_OF_MAX_LIMIT = 999999999;
+
 	public Controller() {
 	}
 
@@ -24,8 +26,8 @@ public class Controller {
 		dbProps.read();
 		guiController.startGUI(dbProps.getReadedDBPathes());
 	}
-	
-	public void removeSQLConnection(String name){
+
+	public void removeSQLConnection(String name) {
 		sqlConnections.remove(name);
 		dbProps.removeDatabase(name);
 		guiController.updateGUI(getSqlConnections());
@@ -33,7 +35,15 @@ public class Controller {
 
 	public void addSQLConnection(String filePath) throws SQLFileNotFoundException {
 		String[] nameSplits = filePath.split("\\\\");
-		String dbName = nameSplits[nameSplits.length - 1];
+		String dbNameWithDot = nameSplits[nameSplits.length - 1];
+		String[] dbNameSplit = dbNameWithDot.split("\\.");
+		String dbName = "";
+		if (dbNameSplit.length == 0) {
+			dbName = dbNameWithDot;
+		}
+		else{
+			dbName = dbNameSplit[0];
+		}
 		SQLConnection con = new SQLConnection(dbName);
 		try {
 			con.loadDB(filePath);
@@ -60,17 +70,26 @@ public class Controller {
 	}
 
 	public void sendGUIQuery(int[] limitValues) {
+		String startLimit = "";
+		String numberOfValues = "";
 		String query = guiController.getQuery();
-		String startLimit = " LIMIT "+limitValues[1];
-		String numberOfValues = " OFFSET "+limitValues[0];
-		query = query +startLimit+numberOfValues;
+		if (limitValues[0] > 0) {
+			startLimit = " LIMIT " + limitValues[0];
+		}
+		if (limitValues[1] > 0 && limitValues[0] > 0) {
+			numberOfValues = " OFFSET " + limitValues[1];
+		} else if (limitValues[1] > 0) {
+			startLimit = " LIMIT " + NUMBER_OF_MAX_LIMIT;
+			numberOfValues = " OFFSET " + limitValues[1];
+		}
+		query = query + startLimit + numberOfValues;
 		sendQuery(query);
 	}
-	
+
 	public void setWrongQueryFlag(Boolean flag) {
 		wrongQueryFlag = flag;
 	}
-	
+
 	public void sendQuery(String query) {
 		String sqlConName = guiController.getChosenDatabase();
 		SQLConnection sqlCon = getSQLConnection(sqlConName);
@@ -97,7 +116,5 @@ public class Controller {
 		ArrayList<SQLConnection> sqlConnectionsList = new ArrayList<>(sqlConnections.values());
 		return sqlConnectionsList;
 	}
-
-	
 
 }
