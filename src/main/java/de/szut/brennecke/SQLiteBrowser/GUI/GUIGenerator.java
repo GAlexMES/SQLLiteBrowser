@@ -84,13 +84,14 @@ public class GUIGenerator {
 		return tree;
 	}
 
-	private static JTable generateJTable(ResultSet rs) {
-		ResultData resultData = ResultWorkup.getTabularDatas(rs);
-		JTable table = new JTable(resultData.getData(), resultData.getColumnNames());
-
+	private static JTable generateJTable(ResultSet rs, GUI mainFrame) {
+		ResultData resultData = null;
+		JTable table = null;
+		resultData = ResultWorkup.getTabularDatas(rs);
+		table = new JTable(resultData.getData(), resultData.getColumnNames());
 		return table;
 	}
-	
+
 	public static void generateQueryTab(final GUI mainFrame) {
 		querryPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -236,17 +237,17 @@ public class GUIGenerator {
 	public static String getChosenDatabase() {
 		return databaseComboBox.getSelectedItem().toString();
 	}
-	
-	private static void updateComboBox(ArrayList<SQLConnection> sqlCons){
+
+	private static void updateComboBox(ArrayList<SQLConnection> sqlCons) {
 		databaseComboBox.removeAll();
 		databaseComboBox.removeAllItems();
-		for(SQLConnection sqlCon : sqlCons){
+		for (SQLConnection sqlCon : sqlCons) {
 			databaseComboBox.addItem(sqlCon.getName());
 		}
 	}
-	
+
 	public static void showQuery(GUI mainFrame, ResultSet rs) {
-		scrollPaneTable = new JScrollPane(generateJTable(rs));
+		scrollPaneTable = new JScrollPane(generateJTable(rs, mainFrame));
 		newQuerryReceived = true;
 		updateMainFrame(mainFrame);
 	}

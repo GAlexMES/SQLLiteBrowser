@@ -5,7 +5,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
+
 public class ResultWorkup {
+
+	private static Object[][] datas;
 
 	public static ResultData getTabularDatas(ResultSet rs) {
 		ResultSetMetaData rsmd;
@@ -28,15 +32,17 @@ public class ResultWorkup {
 			}
 		} catch (SQLException e) {
 		}
+		catch (NullPointerException npe){
+			System.err.println("No Result-Set returnded!");
+		}
 
-		Object[][] datas = new Object[data.size()][data.get(0).size()];
+		datas = new Object[data.size()][data.get(0).size()];
 
 		for (int list = 0; list < data.size(); list++) {
 			for (int element = 0; element < data.get(0).size(); element++) {
 				datas[list][element] = data.get(list).get(element);
 			}
 		}
-				
 		return new ResultData(columnNames, datas);
 	}
 }
