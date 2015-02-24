@@ -2,7 +2,6 @@ package de.szut.brennecke.SQLiteBrowser.GUI;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -22,7 +21,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -33,8 +31,7 @@ import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 public class GUIGenerator {
 	private final static String WRONG_LIMIT_INPUT = "Falsche Eingabe im Limit Feld. Diese wird ignoriert!";
 	private final static String WRONG_OFFSET_INPUT = "Falsche Eingabe im Offset Feld. Diese wird ignoriert!";
-	
-	
+
 	private static JTable resultTable;
 	private static JScrollPane scrollPaneTree;
 	private static JScrollPane scrollPaneTable;
@@ -46,7 +43,6 @@ public class GUIGenerator {
 	private static JSplitPane splitPane;
 
 	public static GUI generateEmptyGUI(GUI mainFrame) {
-
 		// Initialisation
 		// //////////////
 
@@ -63,6 +59,14 @@ public class GUIGenerator {
 		return mainFrame;
 	}
 
+	public static void showQuery(GUI mainFrame, ResultSet rs) {
+		newQuerryReceived = true;
+		generateJTable(rs, mainFrame);
+		generateTabbedPane();
+		splitPane.setRightComponent(tabbedPane);
+		updateFrame(mainFrame);
+	}
+	
 	public static void updateTree(GUI mainFrame, ArrayList<SQLConnection> sqlCons) {
 		JTree tree = generateTree(mainFrame, sqlCons);
 		scrollPaneTree = new JScrollPane(tree);
@@ -82,6 +86,13 @@ public class GUIGenerator {
 		splitPane.setDividerLocation(splitPaneLoc);
 		mainFrame.validate();
 		mainFrame.repaint();
+	}
+	
+	private static void generateJTable(ResultSet rs, GUI mainFrame) {
+		DefaultTableModel resultData = null;
+		resultData = ResultWorkup.getTabularDatas(rs);
+		resultTable.setAutoCreateRowSorter(true);
+		resultTable.setModel(resultData);
 	}
 
 	public static void updateGUI(GUI mainFrame, ArrayList<SQLConnection> sqlCons) {
@@ -125,13 +136,6 @@ public class GUIGenerator {
 		return tree;
 	}
 
-	private static void generateJTable(ResultSet rs, GUI mainFrame) {
-		DefaultTableModel resultData = null;
-		resultData = ResultWorkup.getTabularDatas(rs);
-		resultTable.setAutoCreateRowSorter(true);
-		resultTable.setModel(resultData);
-	}
-	
 	public static void generateQueryTab(final GUI mainFrame) {
 		querryPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -228,20 +232,20 @@ public class GUIGenerator {
 			public void actionPerformed(ActionEvent e) {
 				int startValue = 0;
 				int numberOfValues = 0;
-				
-				if(limitCheck.isSelected()){
-				try {
-					startValue = Integer.valueOf(limitStartInputField.getText());
-				} catch (NumberFormatException nfe) {
-					GUIController.generateWrongQuerryInfoPane(WRONG_LIMIT_INPUT);
+
+				if (limitCheck.isSelected()) {
+					try {
+						startValue = Integer.valueOf(limitStartInputField.getText());
+					} catch (NumberFormatException nfe) {
+						GUIController.generateWrongQuerryInfoPane(WRONG_LIMIT_INPUT);
+					}
 				}
-				}
-				if(offsetCheck.isSelected()){
-				try {
-					numberOfValues = Integer.valueOf(limitNumberInputField.getText());
-				} catch (NumberFormatException nfe) {
-					GUIController.generateWrongQuerryInfoPane(WRONG_OFFSET_INPUT);
-				}
+				if (offsetCheck.isSelected()) {
+					try {
+						numberOfValues = Integer.valueOf(limitNumberInputField.getText());
+					} catch (NumberFormatException nfe) {
+						GUIController.generateWrongQuerryInfoPane(WRONG_OFFSET_INPUT);
+					}
 				}
 				int[] limitValues = { startValue, numberOfValues };
 				mainFrame.getGUIController().getController().sendGUIQuery(limitValues);
@@ -274,10 +278,6 @@ public class GUIGenerator {
 		}
 	}
 
-	public static String getChosenDatabase() {
-		return databaseComboBox.getSelectedItem().toString();
-	}
-
 	private static void updateComboBox(ArrayList<SQLConnection> sqlCons) {
 		databaseComboBox.removeAll();
 		databaseComboBox.removeAllItems();
@@ -286,14 +286,9 @@ public class GUIGenerator {
 		}
 	}
 
-	public static void showQuery(GUI mainFrame, ResultSet rs) {
-		newQuerryReceived = true;
-		scrollPaneTable = new JScrollPane(generateJTable(rs));
-		JTabbedPane newTabbedPane = generateTabbedPane();
-		splitPane.setRightComponent(newTabbedPane);
-		updateFrame(mainFrame);
+	public static String getChosenDatabase() {
+		return databaseComboBox.getSelectedItem().toString();
 	}
-
 	public static JTextArea getTextArea() {
 		return textField;
 	}

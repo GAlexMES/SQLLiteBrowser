@@ -11,8 +11,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class ResultWorkup {
 
-	private static Object[][] datas;
-
 	public static DefaultTableModel getTabularDatas(ResultSet rs) {
 		DefaultTableModel retval = new DefaultTableModel();
 		ResultSetMetaData rsmd;

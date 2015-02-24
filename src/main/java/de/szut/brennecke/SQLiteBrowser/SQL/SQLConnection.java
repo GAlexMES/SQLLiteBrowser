@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
 
 public class SQLConnection {
@@ -60,7 +59,7 @@ public class SQLConnection {
 			statement.executeQuery("ATTACH '" + name + "' as " + name.substring(0, name.length() - 3));
 
 		} catch (SQLException e) {
-			handleSQLException(sqle);
+			handleSQLException(e);
 		}
 	}
 
