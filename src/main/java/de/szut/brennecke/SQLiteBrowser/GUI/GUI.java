@@ -39,12 +39,5 @@ public class GUI extends JFrame{
 	public String getQuery() {
 		return GUIGenerator.getTextArea().getText();
 	}
-
-	public void updateComponents() {
-		GUIGenerator.updateMainFrame(this);
-	}
-
-
-	
     
 }

@@ -31,11 +31,11 @@ import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
 public class GUIGenerator {
-	private static JTable resultTable;
-	
 	private final static String WRONG_LIMIT_INPUT = "Falsche Eingabe im Limit Feld. Diese wird ignoriert!";
 	private final static String WRONG_OFFSET_INPUT = "Falsche Eingabe im Offset Feld. Diese wird ignoriert!";
 	
+	
+	private static JTable resultTable;
 	private static JScrollPane scrollPaneTree;
 	private static JScrollPane scrollPaneTable;
 	private static JTextArea textField;
@@ -44,7 +44,6 @@ public class GUIGenerator {
 	private static JComboBox<String> databaseComboBox;
 	private static JPanel querryPane;
 	private static JSplitPane splitPane;
-	private static JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollPaneTree, tabbedPane);
 
 	public static GUI generateEmptyGUI(GUI mainFrame) {
 
@@ -129,9 +128,10 @@ public class GUIGenerator {
 	private static void generateJTable(ResultSet rs, GUI mainFrame) {
 		DefaultTableModel resultData = null;
 		resultData = ResultWorkup.getTabularDatas(rs);
+		resultTable.setAutoCreateRowSorter(true);
 		resultTable.setModel(resultData);
 	}
-		table.setAutoCreateRowSorter(true);
+	
 	public static void generateQueryTab(final GUI mainFrame) {
 		querryPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
