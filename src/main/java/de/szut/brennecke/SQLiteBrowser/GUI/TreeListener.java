@@ -9,15 +9,35 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+/**
+ * This class is listening to the JTree. It opens a table, when the user clicks
+ * on it. It opens a popup menu when the user right-clicks on a database.
+ * 
+ * @author Alexander Brennecke
+ *
+ */
 public class TreeListener implements TreeSelectionListener, MouseListener {
 
+	// INITIALISATION
+	// //////////////
 	private GUIController guiController;
 	private PopupMenu popupMenu;
+
+	// IMPORTANT FUNCTIONS
+	// ///////////////////
+	/**
+	 * Constructor
+	 * 
+	 * @param gui
+	 */
 	public TreeListener(GUI gui) {
 		this.guiController = gui.getGUIController();
 		popupMenu = new PopupMenu(gui);
 	}
 
+	/**
+	 * This method opens a tabl when the user clicks on it.
+	 */
 	@Override
 	public void valueChanged(TreeSelectionEvent arg0) {
 		TreePath treePath = ((JTree) arg0.getSource()).getSelectionPath();
@@ -30,6 +50,9 @@ public class TreeListener implements TreeSelectionListener, MouseListener {
 		}
 	}
 
+	/**
+	 * This method opens a popup menu when th user right-clicks onto a database.
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (SwingUtilities.isRightMouseButton(e)) {

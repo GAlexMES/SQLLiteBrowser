@@ -9,6 +9,11 @@ import javax.swing.JPopupMenu;
 
 import de.szut.brennecke.SQLiteBrowser.DataHandling.Controller;
 
+/**
+ * This class handles a popup menu, which was opened when the user rightclicks on a database in the JTree
+ * @author Alexander Brennecke
+ *
+ */
 @SuppressWarnings("serial")
 public class PopupMenu extends JPopupMenu {
 	String nameOfSelectedDatabase = "";

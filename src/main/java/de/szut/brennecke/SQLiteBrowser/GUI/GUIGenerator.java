@@ -28,7 +28,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
+/**
+ * This class generates every GUI object (without the main Frame) which is used
+ * for this software.
+ * 
+ * @author Alexander Brennecke
+ *
+ */
 public class GUIGenerator {
+	// INITIALISATION
+	// ///////////////
 	private final static String WRONG_LIMIT_INPUT = "Falsche Eingabe im Limit Feld. Diese wird ignoriert!";
 	private final static String WRONG_OFFSET_INPUT = "Falsche Eingabe im Offset Feld. Diese wird ignoriert!";
 
@@ -42,10 +51,17 @@ public class GUIGenerator {
 	private static JPanel querryPane;
 	private static JSplitPane splitPane;
 
+	// IMPORTANT FUNCTIONS
+	//////////////////////
+	/**
+	 * This method generates Tabs, Tables and Menus for the FIRST time only.
+	 * 
+	 * @param mainFrame
+	 * @return main Frame with menu
+	 */
 	public static GUI generateEmptyGUI(GUI mainFrame) {
-		// Initialisation
-		// //////////////
-
+		// DEKLARATION
+		//////////////
 		resultTable = new JTable();
 		textField = new JTextArea();
 		tabbedPane = new JTabbedPane();
@@ -59,26 +75,52 @@ public class GUIGenerator {
 		return mainFrame;
 	}
 
+	/**
+	 * This method is called when a ResultSet should be displayed. It updates
+	 * the TableModel and the main frame.
+	 * 
+	 * @param mainFrame
+	 * @param rs
+	 *            new ResultSet with new Values
+	 */
 	public static void showQuery(GUI mainFrame, ResultSet rs) {
 		newQuerryReceived = true;
-		generateJTable(rs, mainFrame);
+		updateTable(rs, mainFrame);
 		generateTabbedPane();
 		splitPane.setRightComponent(tabbedPane);
 		updateFrame(mainFrame);
 	}
 	
+	/**
+	 * This method exchanges the TableModel with a new one
+	 * @param rs
+	 * @param mainFrame
+	 */
+	private static void updateTable(ResultSet rs, GUI mainFrame) {
+		DefaultTableModel resultData = null;
+		resultData = ResultWorkup.getTabularDatas(rs);
+		resultTable.setAutoCreateRowSorter(true);
+		resultTable.setModel(resultData);
+	}
+
+	/**
+	 * This method updates the tree, which shows the opened databases
+	 * 
+	 * @param mainFrame
+	 * @param sqlCons
+	 *            list of open SQLConnections
+	 */
 	public static void updateTree(GUI mainFrame, ArrayList<SQLConnection> sqlCons) {
 		JTree tree = generateTree(mainFrame, sqlCons);
 		scrollPaneTree = new JScrollPane(tree);
 		splitPane.setLeftComponent(scrollPaneTree);
 	}
 
-	public static void updateTable(ArrayList<SQLConnection> sqlCons) {
-		updateComboBox(sqlCons);
-		generateTabbedPane();
-		splitPane.setRightComponent(tabbedPane);
-	}
-
+	/**
+	 * This method updates the hole main frame
+	 * It removes and add the splitPane, which includes all other elements
+	 * @param mainFrame
+	 */
 	private static void updateFrame(GUI mainFrame) {
 		mainFrame.getContentPane().removeAll();
 		int splitPaneLoc = splitPane.getDividerLocation();
@@ -87,20 +129,23 @@ public class GUIGenerator {
 		mainFrame.validate();
 		mainFrame.repaint();
 	}
-	
-	private static void generateJTable(ResultSet rs, GUI mainFrame) {
-		DefaultTableModel resultData = null;
-		resultData = ResultWorkup.getTabularDatas(rs);
-		resultTable.setAutoCreateRowSorter(true);
-		resultTable.setModel(resultData);
-	}
 
+	/**
+	 * This method updates every component placed on the main frame. Excepted is the data table!
+	 * @param mainFrame
+	 * @param sqlCons list with current opened databases
+	 */
 	public static void updateGUI(GUI mainFrame, ArrayList<SQLConnection> sqlCons) {
-		updateTable(sqlCons);
+		updateComboBox(sqlCons);
 		updateTree(mainFrame, sqlCons);
 		updateFrame(mainFrame);
 	}
 
+	/**
+	 * This method generates the menu
+	 * @param gui
+	 * @return a JMenuBar which can be added to the main frame
+	 */
 	private static JMenuBar generateMenu(GUI gui) {
 		JMenuBar menuBar = new JMenuBar();
 		MenuListener menuListener = new MenuListener(gui);
@@ -119,6 +164,12 @@ public class GUIGenerator {
 		return menuBar;
 	}
 
+	/**
+	 * This method generates the Tree which shows the databases and tables
+	 * @param mainFrame
+	 * @param sqlConnections list with current opened databases
+	 * @return a JTree with databases as sub-Elements and tables as sub-sub-Elements
+	 */
 	private static JTree generateTree(GUI mainFrame, ArrayList<SQLConnection> sqlConnections) {
 		DefaultMutableTreeNode database = new DefaultMutableTreeNode("Datenbanken");
 		for (SQLConnection con : sqlConnections) {
@@ -136,6 +187,15 @@ public class GUIGenerator {
 		return tree;
 	}
 
+	/**
+	 * 	This method generates the QueryTab, which will be added to the TabPane.
+	 * The QuerryTab includes:
+	 * 	<li> ComboBox with currently opened databases </li>
+	 * 	<li> TextPane for the query input</li>
+	 * 	<li> CheckBoxes and Input fields for LIMIT and OFFSET Statements </li>
+	 * 	<li> A execute button to execude the query </li>
+	 * @param mainFrame
+	 */
 	public static void generateQueryTab(final GUI mainFrame) {
 		querryPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -259,7 +319,10 @@ public class GUIGenerator {
 
 		querryPane.add(executeButton, c);
 	}
-
+	
+	/**
+	 * This method generates the TabbedPane, which handles the TablePane and QueryPane.
+	 */
 	public static void generateTabbedPane() {
 		// ////////
 		// TABBEDPANE
@@ -278,17 +341,27 @@ public class GUIGenerator {
 		}
 	}
 
+	/**
+	 * This method updates the ComboBox
+	 * @param sqlCons list with SQLConnections which will be displayed into the ComboBox
+	 */
 	private static void updateComboBox(ArrayList<SQLConnection> sqlCons) {
 		databaseComboBox.removeAll();
 		databaseComboBox.removeAllItems();
 		for (SQLConnection sqlCon : sqlCons) {
 			databaseComboBox.addItem(sqlCon.getName());
 		}
+		generateTabbedPane();
+		splitPane.setRightComponent(tabbedPane);
 	}
 
+	// GETTER&SETTER
+	//////////////////////
+	
 	public static String getChosenDatabase() {
 		return databaseComboBox.getSelectedItem().toString();
 	}
+
 	public static JTextArea getTextArea() {
 		return textField;
 	}

@@ -10,8 +10,16 @@ import java.util.ArrayList;
 
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
 
+/**
+ * This class produces a connection to a database file.
+ * It also sends querys and forwards the results.
+ * @author Alexander Brennecke
+ *
+ */
 public class SQLConnection {
 
+	//INITIALISATION
+	////////////////
 	private final String SQLEXCEPTION_NORESULT = "query does not return ResultSet";
 	private final String SQLEXCEPTION_ERROR = "[SQLITE_ERROR]";
 	private final String SQLEXCEPTION_BUSY = "[SQLITE_BUSY]";
@@ -23,6 +31,12 @@ public class SQLConnection {
 	
 	private ArrayList<String> tableNames = new ArrayList<String>();
 
+	//IMPORTANT FUNCTIONS
+	/////////////////////
+	/**
+	 * Constructor
+	 * @param name of the database
+	 */
 	public SQLConnection(String name) {
 		this.name = name;
 	}
@@ -30,8 +44,7 @@ public class SQLConnection {
 	/**
 	 * Tries to connect to the given db file
 	 * 
-	 * @param path
-	 *            to the db file
+	 * @param path to the db file
 	 */
 	public void loadDB(String path) throws SQLFileNotFoundException {
 
@@ -63,6 +76,11 @@ public class SQLConnection {
 		}
 	}
 
+	/**
+	 * Tries to send a query to the database
+	 * @param command query as String
+	 * @return ResultSet with the retval of the database
+	 */
 	public ResultSet sendQuery(String command) {
 		ResultSet currentSet = null;
 		try {
@@ -75,6 +93,11 @@ public class SQLConnection {
 
 		}
 	}
+	
+	/**
+	 * This method handles SQLExceptions.
+	 * @param sqle SQLException
+	 */
 	private void handleSQLException (SQLException sqle){
 		if (sqle.getMessage().contains(SQLEXCEPTION_NORESULT)) {
 			System.err.println("No return Data. Use lastResult");
@@ -89,6 +112,9 @@ public class SQLConnection {
 		}
 	}
 
+	
+	//GETTER&SETTER
+	///////////////
 	public String getName() {
 		return this.name;
 	}

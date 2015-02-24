@@ -5,7 +5,14 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.Properties;
 
+/**
+ * This class saves and read the frame properties out of the props.ini file, which is saved in the resources.
+ * @author Alexander Brennecke
+ *
+ */
 public class FrameProperties {
+	//INITIALISATION
+	////////////////
 	URL filePath = this.getClass().getResource("/de/szut/brennecke/SQLiteBrowser/Resources/props.ini");
 	
 	private int mainFrameWidth;
@@ -16,10 +23,18 @@ public class FrameProperties {
 	
 	private Properties properties = new Properties();
 	
+	//IMPORTANT FUNCTIONS
+	/////////////////////
+	/**
+	 * Constructor
+	 */
 	public FrameProperties(){
 		read();
 	}
 	
+	/**
+	 * This method reads the properties out of the .ini file and saves them to local variables
+	 */
 	public void read(){
 			try {
 				properties.load(new FileInputStream(filePath.getPath()));
@@ -33,6 +48,9 @@ public class FrameProperties {
 			}
 	}
 	
+	/**
+	 * This method uses local variables to write frame properties to the .ini file
+	 */
 	public void write(){
 		try {
 			properties.load(new FileInputStream(filePath.getPath()));
@@ -48,6 +66,8 @@ public class FrameProperties {
 		}
 	}
 
+	//GETTER&SETTER
+	///////////////
 	public int getMainFrameWidth() {
 		return mainFrameWidth;
 	}

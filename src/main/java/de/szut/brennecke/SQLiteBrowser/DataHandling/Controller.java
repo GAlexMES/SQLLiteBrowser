@@ -9,7 +9,17 @@ import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
 
+/**
+ * 
+ * @author Alexander Brennecke
+ * 
+ * This Class is a Controller Class, which works between the GUIController and the SQLConnections. It handles all open SQLConnections and gives commands to the GUICOntroller.java
+ *
+ */
 public class Controller {
+	
+	//INITIALISATION
+	////////////////
 	DatabaseProperties dbProps = new DatabaseProperties();
 	GUIController guiController = new GUIController(this);
 	private String lastShowQuery = "";
@@ -19,20 +29,33 @@ public class Controller {
 	private final int NUMBER_OF_MAX_LIMIT = 999999999;
 	private final String NUMBER_OF_MAX_LIMIT_WARNING = "Da bei einem Offset ein Limit benötigt wird, wurde dies auf '999999999' gesetzt!";
 
-	public Controller() {
-	}
-
+	
+	//IMPORTANT FUNCTIONS
+	/////////////////////
+	
+	/**
+	 * Opens the GUI main Frame
+	 */
 	public void startGUI() {
 		dbProps.read();
 		guiController.startGUI(dbProps.getReadedDBPathes());
 	}
 
+	/**
+	 * removes a SQLConnection based on it's name
+	 * @param name of the SQLConnection
+	 */
 	public void removeSQLConnection(String name) {
 		sqlConnections.remove(name);
 		dbProps.removeDatabase(name);
 		guiController.updateGUI(getSqlConnections());
 	}
 
+	/**
+	 * Adds a SQLConnection to the stack
+	 * @param filePath to the db file
+	 * @throws SQLFileNotFoundException when path is incorrect
+	 */
 	public void addSQLConnection(String filePath) throws SQLFileNotFoundException {
 		String[] nameSplits = filePath.split("\\\\");
 		String dbNameWithDot = nameSplits[nameSplits.length - 1];
@@ -55,6 +78,12 @@ public class Controller {
 
 	}
 
+	/**
+	 * Says the GUIController to open a table.
+	 * Is usually called, when a JTree Tableobject was clicked.
+	 * @param database name of the database, which includes the table
+	 * @param table name of the table which should be shown
+	 */
 	public void openTable(String database, String table) {
 		SQLConnection sqlCon = sqlConnections.get(database);
 		String query = "Select * from " + table;
@@ -63,11 +92,18 @@ public class Controller {
 		lastShowQuery = query;
 	}
 
+	/**
+	 * Sends the query, which is written into the queryTextPane
+	 */
 	public void sendGUIQuery() {
 		String query = guiController.getQuery();
 		sendQuery(query);
 	}
 
+	/**
+	 * the query, which is written into the queryTextPane 
+	 * @param limitValues [0] = LIMIT; [1] = OFFSET
+	 */
 	public void sendGUIQuery(int[] limitValues) {
 		boolean showInfoPane = false;
 		String startLimit = "";
@@ -90,11 +126,11 @@ public class Controller {
 			GUIController.generateWrongQuerryInfoPane(NUMBER_OF_MAX_LIMIT_WARNING);
 		}
 	}
-
-	public void setWrongQueryFlag(Boolean flag) {
-		wrongQueryFlag = flag;
-	}
-
+	
+	/**
+	 * sends a Query to the chosen database
+	 * @param query query statement
+	 */
 	public void sendQuery(String query) {
 		String sqlConName = guiController.getChosenDatabase();
 		SQLConnection sqlCon = getSQLConnection(sqlConName);
@@ -112,6 +148,11 @@ public class Controller {
 		}
 	}
 
+	
+	//GETTER&SETTER
+	///////////////
+	
+	
 	private SQLConnection getSQLConnection(String name) {
 		SQLConnection sqlCon = sqlConnections.get(name);
 		return sqlCon;
@@ -120,6 +161,9 @@ public class Controller {
 	public ArrayList<SQLConnection> getSqlConnections() {
 		ArrayList<SQLConnection> sqlConnectionsList = new ArrayList<>(sqlConnections.values());
 		return sqlConnectionsList;
+	}
+	public void setWrongQueryFlag(Boolean flag) {
+		wrongQueryFlag = flag;
 	}
 
 }

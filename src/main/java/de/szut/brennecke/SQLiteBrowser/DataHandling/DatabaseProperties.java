@@ -13,26 +13,35 @@ import java.util.Map;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
+
+/**
+ * 
+ * @author Alexander Brennecke
+ *
+ *	This class saves the pathes to the current open databases to a .csv file.
+ *	This gives the option to restore the opened databases after a restart of the software
+ */
 public class DatabaseProperties {
+	
+	//INITIALISATION
+	////////////////
 	private URL filePath = null;
 	private Map<String, String> readedDbPathes = new HashMap<String, String>();
 	private Map<String, String> newDbPathes = new HashMap<String, String>();
 
+	
+	//IMPORTANT FUNCTIONS
+	/////////////////////
+	/**
+	 * Constructor
+	 */
 	public DatabaseProperties() {
 		this.filePath = this.getClass().getResource("/de/szut/brennecke/SQLiteBrowser/Resources/dbProperties.csv");
 	}
 
-	public void addDatabasse(String name, String path) {
-		path = generateSlash(path);
-		newDbPathes.put(name, path);
-		write();
-	}
-	
-	public void removeDatabase(String name){
-		newDbPathes.remove(name);
-		write();
-	}
-
+	/**
+	 * This method writes the current paths to the .csv file
+	 */
 	public void write() {
 		CSVWriter csvWriter;
 		try {
@@ -51,6 +60,9 @@ public class DatabaseProperties {
 		}
 	}
 
+	/**
+	 * This method reads the .csv file and saves the paths to a ArrayList
+	 */
 	public void read() {
 		CSVReader csvReader;
 		try {
@@ -66,15 +78,32 @@ public class DatabaseProperties {
 			e.printStackTrace();
 		}
 	}
-
-	public List<String> getReadedDBPathes() {
-		List<String> dbPathesList = new ArrayList<>(readedDbPathes.values());
-		return dbPathesList;
-	}
 	
+	/**
+	 * Replaces every \ with a \\
+	 * @param path that should be modified
+	 * @return modified path
+	 */
 	private String generateSlash (String path){
 		path = path.replace("\\", "\\\\");
 		return path;
 	}
 
+	//GETTER&SETTER
+	///////////////
+	public List<String> getReadedDBPathes() {
+		List<String> dbPathesList = new ArrayList<>(readedDbPathes.values());
+		return dbPathesList;
+	}
+	
+	public void addDatabasse(String name, String path) {
+		path = generateSlash(path);
+		newDbPathes.put(name, path);
+		write();
+	}
+	
+	public void removeDatabase(String name){
+		newDbPathes.remove(name);
+		write();
+	}
 }
