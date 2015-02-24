@@ -48,7 +48,6 @@ public class SQLConnection {
 			ResultSet rs = md.getTables(null, null, "%", null);
 			while (rs.next()) {
 				String type = rs.getString(4);
-				System.out.println(type);
 				if (type.equals("TABLE")) {
 					tableNames.add(rs.getString(3));
 				}
