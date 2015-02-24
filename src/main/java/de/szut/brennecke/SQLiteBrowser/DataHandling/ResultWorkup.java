@@ -5,13 +5,16 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
 
 
 public class ResultWorkup {
 
 	private static Object[][] datas;
 
-	public static ResultData getTabularDatas(ResultSet rs) {
+	public static DefaultTableModel getTabularDatas(ResultSet rs) {
+		DefaultTableModel retval = new DefaultTableModel();
 		ResultSetMetaData rsmd;
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 		Object[] columnNames = null;
@@ -22,13 +25,16 @@ public class ResultWorkup {
 				String name = rsmd.getColumnName(i);
 				columnNames[i - 1] = name;
 			}
-			int counter = 0;
+			
+			retval.setColumnIdentifiers(columnNames);
+			
 			while (rs.next()) {
 				data.add(new ArrayList<String>());
+				String[] row = new String[rsmd.getColumnCount()];
 				for (int element = 1; element <= columnNames.length; element++) {
-					data.get(counter).add(rs.getString(element));
+					row[element-1]=rs.getString(element);
 				}
-				counter++;
+				retval.addRow(row);
 			}
 		} catch (SQLException e) {
 		}
@@ -36,13 +42,7 @@ public class ResultWorkup {
 			System.err.println("No Result-Set returnded!");
 		}
 
-		datas = new Object[data.size()][data.get(0).size()];
-
-		for (int list = 0; list < data.size(); list++) {
-			for (int element = 0; element < data.get(0).size(); element++) {
-				datas[list][element] = data.get(list).get(element);
-			}
-		}
-		return new ResultData(columnNames, datas);
+		
+		return retval;
 	}
 }
