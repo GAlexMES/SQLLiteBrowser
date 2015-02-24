@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
-
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
 
 public class Controller {
@@ -18,6 +17,7 @@ public class Controller {
 	private Boolean wrongQueryFlag = false;
 
 	private final int NUMBER_OF_MAX_LIMIT = 999999999;
+	private final String NUMBER_OF_MAX_LIMIT_WARNING = "Da bei einem Offset ein Limit benötigt wird, wurde dies auf '999999999' gesetzt!";
 
 	public Controller() {
 	}
@@ -40,8 +40,7 @@ public class Controller {
 		String dbName = "";
 		if (dbNameSplit.length == 0) {
 			dbName = dbNameWithDot;
-		}
-		else{
+		} else {
 			dbName = dbNameSplit[0];
 		}
 		SQLConnection con = new SQLConnection(dbName);
@@ -70,6 +69,7 @@ public class Controller {
 	}
 
 	public void sendGUIQuery(int[] limitValues) {
+		boolean showInfoPane = false;
 		String startLimit = "";
 		String numberOfValues = "";
 		String query = guiController.getQuery();
@@ -81,9 +81,14 @@ public class Controller {
 		} else if (limitValues[1] > 0) {
 			startLimit = " LIMIT " + NUMBER_OF_MAX_LIMIT;
 			numberOfValues = " OFFSET " + limitValues[1];
+			showInfoPane = true;
 		}
 		query = query + startLimit + numberOfValues;
+		System.out.println(query);
 		sendQuery(query);
+		if (showInfoPane) {
+			GUIController.generateWrongQuerryInfoPane(NUMBER_OF_MAX_LIMIT_WARNING);
+		}
 	}
 
 	public void setWrongQueryFlag(Boolean flag) {

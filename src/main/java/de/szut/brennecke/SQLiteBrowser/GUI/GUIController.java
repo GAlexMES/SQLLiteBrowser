@@ -47,7 +47,7 @@ public class GUIController {
 				try {
 					controller.addSQLConnection(dbPath);
 				} catch (SQLFileNotFoundException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage());
+					generateWrongQuerryInfoPane(e.getMessage());
 				}
 			}
 		}
