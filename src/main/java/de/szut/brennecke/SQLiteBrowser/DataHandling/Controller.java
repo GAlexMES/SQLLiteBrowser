@@ -152,7 +152,7 @@ public class Controller {
 	}
 	
 	public void updateChart(Chart2D chart){
-		GUIGenerator.generateChartPane(chart);
+		GUIGenerator.updateChartPane(chart);
 	}
 
 	

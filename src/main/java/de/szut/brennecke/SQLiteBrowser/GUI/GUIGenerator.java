@@ -24,11 +24,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import de.szut.brennecke.SQLiteBrowser.DataHandling.ChartDrawer;
 import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
@@ -54,7 +54,7 @@ public class GUIGenerator {
 	private static JComboBox<String> databaseComboBox;
 	private static JPanel querryPane;
 	private static JSplitPane splitPane;
-	private static JScrollPane scrollPaneChart;
+	private static JPanel chartPane;
 
 	// IMPORTANT FUNCTIONS
 	//////////////////////
@@ -74,6 +74,7 @@ public class GUIGenerator {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
 		generateQueryTab(mainFrame);
+		generateChartPane();
 		mainFrame.setJMenuBar(generateMenu(mainFrame));
 		scrollPaneTable = new JScrollPane(resultTable);
 		
@@ -295,7 +296,6 @@ public class GUIGenerator {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ChartDrawer chart = new ChartDrawer(mainFrame.getGUIController().getController());
 				int startValue = 0;
 				int numberOfValues = 0;
 
@@ -326,10 +326,72 @@ public class GUIGenerator {
 		querryPane.add(executeButton, c);
 	}
 	
-	public static void generateChartPane(Chart2D chart){
+	private static void generateChartPane(){
+		chartPane = new JPanel();
+		chartPane.setLayout(new GridBagLayout());
+		
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.2;
+		c.weighty = 0.0;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.PAGE_END;
+		
+		JLabel database = new JLabel ("Select Database!");
+		c.gridx = 0;
+		chartPane.add(database,c);
+		
+		JComboBox<String> databaseChartComboBox = new JComboBox<String>();
+		c.gridy = 1;
+		chartPane.add(databaseChartComboBox,c);
+		
+		JLabel table = new JLabel ("Select Table!");
+		c.gridy = 2;
+		chartPane.add(table,c);
+		
+		JComboBox<String> tableChartComboBox = new JComboBox<String>();		
+		c.gridy = 3;
+		chartPane.add(tableChartComboBox,c);
+		
+		JLabel xValue = new JLabel ("Select Row for xValue!");
+		c.gridy = 4;
+		chartPane.add(xValue,c);
+		
+		JComboBox<String> xValueChartComboBox = new JComboBox<String>();		
+		c.gridy = 5;
+		chartPane.add(xValueChartComboBox,c);
+		
+		JLabel yValue = new JLabel("Select Row for yValue!");
+		c.gridy = 6;
+		chartPane.add(yValue,c);
+		
+		JComboBox<String> yValueChartComboBox = new JComboBox<String>();
+		c.gridy = 7;
+		chartPane.add(yValueChartComboBox,c);
+		
+		JButton showChart = new JButton ("Show Chart!");
+		c.gridy = 8;
+		chartPane.add(showChart,c);
+		
+		Chart2D chart = new Chart2D();
 		ChartPanel chartPanel = new ChartPanel(chart);
-		scrollPaneChart = new JScrollPane(chartPanel);
-		generateTabbedPane();
+		c.gridy = 0;
+		c.gridx = 1;
+		c.weightx = 0.8;
+		c.weighty =1.0;
+		c.gridheight=9;
+		c.fill= GridBagConstraints.BOTH;
+		chartPane.add(chartPanel,c);
+		
+	}
+	
+	public static void updateChartPane(Chart2D chart){
+//		ChartPanel chartPanel = new ChartPanel(chart);
+//		chartPane = new JPanel();
+//		chartPane.add(chartPanel);
+//		generateTabbedPane();
 	}
 	
 	/**
@@ -344,7 +406,7 @@ public class GUIGenerator {
 		tabbedPane.removeAll();
 		tabbedPane.addTab("Tabelle", scrollPaneTable);
 		tabbedPane.addTab("Query", querryPane);
-		tabbedPane.addTab("Chart", scrollPaneChart);
+		tabbedPane.addTab("Chart", chartPane);
 
 		if (selectedIndex == -1 || newQuerryReceived) {
 			tabbedPane.setSelectedIndex(0);
