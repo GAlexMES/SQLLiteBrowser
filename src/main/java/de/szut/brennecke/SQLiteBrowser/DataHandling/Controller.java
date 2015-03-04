@@ -160,7 +160,7 @@ public class Controller {
 	///////////////
 	
 	
-	private SQLConnection getSQLConnection(String name) {
+	public SQLConnection getSQLConnection(String name) {
 		SQLConnection sqlCon = sqlConnections.get(name);
 		return sqlCon;
 	}
@@ -172,5 +172,6 @@ public class Controller {
 	public void setWrongQueryFlag(Boolean flag) {
 		wrongQueryFlag = flag;
 	}
+
 
 }

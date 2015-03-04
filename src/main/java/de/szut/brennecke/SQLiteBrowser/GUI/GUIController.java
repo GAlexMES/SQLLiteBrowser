@@ -109,6 +109,5 @@ public class GUIController {
 	public void showQuery(ResultSet rs) {
 		GUIGenerator.showQuery(gui, rs);
 	}
-
 	
 }
