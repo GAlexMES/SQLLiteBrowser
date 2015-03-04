@@ -3,12 +3,13 @@ package de.szut.brennecke.SQLiteBrowser.GUI;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.views.ChartPanel;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -26,7 +27,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -62,6 +62,9 @@ public class GUIGenerator {
 	private static JComboBox<String> xValueChartComboBox;
 	private static JComboBox<String> yValueChartComboBox;
 	private static SQLConnection selectedConnection;
+	private static JButton showChartButton;
+
+	private static String selectedTableName;
 
 	// IMPORTANT FUNCTIONS
 	// ////////////////////
@@ -342,55 +345,71 @@ public class GUIGenerator {
 		querryPane.add(executeButton, c);
 	}
 
-	private static void generateChartPaneComboBoxes(final GUIController controller) {
+	private static void generateChartPaneListeners(final GUIController controller) {
 		databaseChartComboBox = new JComboBox<String>();
 		databaseChartComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String databaseName = databaseChartComboBox.getSelectedObjects()[0].toString();
-				selectedConnection = controller.getController().getSQLConnection(databaseName);
-				tableChartComboBox.removeAllItems();
-				ArrayList<String> tableNames = selectedConnection.getTableNames();
-				for (String table : tableNames) {
-					tableChartComboBox.addItem(table);
+				if (databaseChartComboBox.getItemCount() > 0) {
+					String databaseName = databaseChartComboBox.getSelectedObjects()[0].toString();
+					selectedConnection = controller.getController().getSQLConnection(databaseName);
+					tableChartComboBox.removeAllItems();
+					ArrayList<String> tableNames = selectedConnection.getTableNames();
+					for (String table : tableNames) {
+						tableChartComboBox.addItem(table);
+					}
 				}
 			}
 		});
 
 		tableChartComboBox = new JComboBox<String>();
-		tableChartComboBox.addActionListener(new ActionListener() {			
+		tableChartComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String tableName = tableChartComboBox.getSelectedObjects()[0].toString();
-				String query = "select * from " + tableName + " LIMIT 1 OFFSET 1";
-				ResultSet result = selectedConnection.sendQuery(query);
-				ResultSetMetaData rsmd;
-				try {
-					rsmd = result.getMetaData();
-					Object[] columnNames = new Object[rsmd.getColumnCount()];
-					for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-						String name = rsmd.getColumnName(i);
-						xValueChartComboBox.addItem(name);
-						yValueChartComboBox.addItem(name);
+				if (tableChartComboBox.getItemCount() > 0) {
+					selectedTableName = tableChartComboBox.getSelectedObjects()[0].toString();
+
+					xValueChartComboBox.removeAllItems();
+					yValueChartComboBox.removeAllItems();
+					try {
+						DatabaseMetaData dmd = selectedConnection.getConnection().getMetaData();
+						ResultSet result = dmd.getColumns(null, null, selectedTableName, null);
+						while (result.next()) {
+							String name = result.getString("COLUMN_NAME");
+							xValueChartComboBox.addItem(name);
+							yValueChartComboBox.addItem(name);
+						}
+					} catch (SQLException e1) {
 					}
-				} catch (SQLException e1) {
 				}
-				
-				
 			}
 		});
 
 		xValueChartComboBox = new JComboBox<String>();
-
 		yValueChartComboBox = new JComboBox<String>();
+
+		showChartButton = new JButton("Show Chart!");
+		showChartButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int xValueCounter = xValueChartComboBox.getItemCount();
+				int yValueCounter = yValueChartComboBox.getItemCount();
+				if (xValueCounter > 0 && yValueCounter > 0) {
+					String xValueColoum = xValueChartComboBox.getSelectedItem().toString();
+					String yValueColoum = yValueChartComboBox.getSelectedItem().toString();
+					controller.generateChart(selectedConnection.getName(), selectedTableName, xValueColoum, yValueColoum);
+				}
+			}
+		});
 	}
 
 	private static void generateChartPane(GUIController controller) {
 		ArrayList<SQLConnection> sqlCons = controller.getController().getSqlConnections();
-		for(SQLConnection sqlCon:sqlCons){
+		for (SQLConnection sqlCon : sqlCons) {
 			databaseChartComboBox.addItem(sqlCon.getName());
 		}
-		generateChartPaneComboBoxes(controller);
+		generateChartPaneListeners(controller);
 		chartPane = new JPanel();
 		chartPane.setLayout(new GridBagLayout());
 
@@ -431,12 +450,22 @@ public class GUIGenerator {
 		c.gridy = 7;
 		chartPane.add(yValueChartComboBox, c);
 
-		JButton showChart = new JButton("Show Chart!");
 		c.gridy = 8;
-		chartPane.add(showChart, c);
+		chartPane.add(showChartButton, c);
+	}
 
-		Chart2D chart = new Chart2D();
+	public static void updateChartPane(Chart2D chart) {
+		Component[] components = chartPane.getComponents();
+		for(Component component:components){
+			if(component instanceof ChartPanel){
+				chartPane.remove(component);
+			}
+		}
+		
 		ChartPanel chartPanel = new ChartPanel(chart);
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.anchor = GridBagConstraints.PAGE_END;
 		c.gridy = 0;
 		c.gridx = 1;
 		c.weightx = 0.8;
@@ -445,13 +474,7 @@ public class GUIGenerator {
 		c.fill = GridBagConstraints.BOTH;
 		chartPane.add(chartPanel, c);
 
-	}
-
-	public static void updateChartPane(Chart2D chart) {
-		// ChartPanel chartPanel = new ChartPanel(chart);
-		// chartPane = new JPanel();
-		// chartPane.add(chartPanel);
-		// generateTabbedPane();
+		generateTabbedPane();
 	}
 
 	/**

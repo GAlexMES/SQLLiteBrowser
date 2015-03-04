@@ -173,5 +173,13 @@ public class Controller {
 		wrongQueryFlag = flag;
 	}
 
+	public Chart2D generateChart(String name, String selectedTableName, String xValueColoum, String yValueColoum) {
+		String query = "select "+ xValueColoum + ", " + yValueColoum + " from " + selectedTableName;
+		ResultSet result = sqlConnections.get(name).sendQuery(query);
+		ArrayList<Double[]> resultChartValues = ResultWorkup.getChartValues(result);
+		Chart2D retval = ChartDrawer.generateChart(resultChartValues);
+		return retval;
+	}
+
 
 }

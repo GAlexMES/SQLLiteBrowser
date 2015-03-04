@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * This class is used to analyse a ResultSet and to generate a TableModel.
  * 
@@ -17,8 +19,11 @@ public class ResultWorkup {
 
 	/**
 	 * This method generates a new DefaultTableModel out of a ResultSet.
-	 * @param rs ResultSet which should be converted into a DefaultTableModel
-	 * @return retval DefaultTableModel, which includes the values of the ResultSet
+	 * 
+	 * @param rs
+	 *            ResultSet which should be converted into a DefaultTableModel
+	 * @return retval DefaultTableModel, which includes the values of the
+	 *         ResultSet
 	 */
 	public static DefaultTableModel getTabularDatas(ResultSet rs) {
 		DefaultTableModel retval = new DefaultTableModel();
@@ -32,22 +37,72 @@ public class ResultWorkup {
 				String name = rsmd.getColumnName(i);
 				columnNames[i - 1] = name;
 			}
-			
+
 			retval.setColumnIdentifiers(columnNames);
-			
+
 			while (rs.next()) {
 				data.add(new ArrayList<String>());
 				String[] row = new String[rsmd.getColumnCount()];
 				for (int element = 1; element <= columnNames.length; element++) {
-					row[element-1]=rs.getString(element);
+					row[element - 1] = rs.getString(element);
 				}
 				retval.addRow(row);
 			}
 		} catch (SQLException e) {
-		}
-		catch (NullPointerException npe){
+		} catch (NullPointerException npe) {
 			System.err.println("No Result-Set returnded!");
-		}		
+		}
 		return retval;
+	}
+
+	public static ArrayList<Double[]> getChartValues(ResultSet result) {
+		ArrayList<Double[]> retval = new ArrayList<>();
+		try {
+			while (result.next()) {
+				String xValue = result.getString(1);
+				String yValue = result.getString(2);
+				System.out.println(xValue + "     " + yValue);
+				if (isValueUseful(xValue) && isValueUseful(yValue)) {
+					System.out.println("used!");
+					Double[] row = new Double[2];
+					row[0] = Double.parseDouble(xValue);
+					row[1] = Double.parseDouble(yValue);
+					retval.add(row);
+				}
+
+			}
+		} catch (NumberFormatException | SQLException e) {
+			
+		}
+
+		return retval;
+	}
+
+	private static Boolean isValueUseful(String value) {
+		if (isNullOrEmpty(value)) {
+			if (isNumeric(value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static Boolean isNullOrEmpty(String value) {
+		if (!(value == null)) {
+			if (!StringUtils.isEmpty(value) && !StringUtils.isBlank(value)) {
+				return true;
+			}
+		}
+		return false;
+
+	}
+
+	private static Boolean isNumeric(String value) {
+		try {
+			Double.parseDouble(value);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -37,6 +37,11 @@
 			<version>3.8.7</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		<dependency>
 			<groupId>jchart2d</groupId>
 			<artifactId>com.jchart2d</artifactId>
 			<version>3.2.0</version>

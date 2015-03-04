@@ -122,4 +122,8 @@ public class SQLConnection {
 	public ArrayList<String> getTableNames() {
 		return this.tableNames;
 	}
+	
+	public Connection getConnection(){
+		return con;
+	}
 }

@@ -1,5 +1,7 @@
 package de.szut.brennecke.SQLiteBrowser.GUI;
 
+import info.monitorenter.gui.chart.Chart2D;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +110,11 @@ public class GUIController {
 
 	public void showQuery(ResultSet rs) {
 		GUIGenerator.showQuery(gui, rs);
+	}
+
+	public void generateChart(String name, String selectedTableName, String xValueColoum, String yValueColoum) {
+		Chart2D chart = controller.generateChart(name, selectedTableName,xValueColoum, yValueColoum);
+		GUIGenerator.updateChartPane(chart);
 	}
 	
 }
