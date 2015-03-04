@@ -1,5 +1,8 @@
 package de.szut.brennecke.SQLiteBrowser.GUI;
 
+import info.monitorenter.gui.chart.Chart2D;
+import info.monitorenter.gui.chart.views.ChartPanel;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -25,6 +28,7 @@ import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import de.szut.brennecke.SQLiteBrowser.DataHandling.ChartDrawer;
 import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
@@ -50,6 +54,7 @@ public class GUIGenerator {
 	private static JComboBox<String> databaseComboBox;
 	private static JPanel querryPane;
 	private static JSplitPane splitPane;
+	private static JScrollPane scrollPaneChart;
 
 	// IMPORTANT FUNCTIONS
 	//////////////////////
@@ -71,7 +76,7 @@ public class GUIGenerator {
 		generateQueryTab(mainFrame);
 		mainFrame.setJMenuBar(generateMenu(mainFrame));
 		scrollPaneTable = new JScrollPane(resultTable);
-
+		
 		return mainFrame;
 	}
 
@@ -290,6 +295,7 @@ public class GUIGenerator {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				ChartDrawer chart = new ChartDrawer(mainFrame.getGUIController().getController());
 				int startValue = 0;
 				int numberOfValues = 0;
 
@@ -320,6 +326,12 @@ public class GUIGenerator {
 		querryPane.add(executeButton, c);
 	}
 	
+	public static void generateChartPane(Chart2D chart){
+		ChartPanel chartPanel = new ChartPanel(chart);
+		scrollPaneChart = new JScrollPane(chartPanel);
+		generateTabbedPane();
+	}
+	
 	/**
 	 * This method generates the TabbedPane, which handles the TablePane and QueryPane.
 	 */
@@ -332,6 +344,7 @@ public class GUIGenerator {
 		tabbedPane.removeAll();
 		tabbedPane.addTab("Tabelle", scrollPaneTable);
 		tabbedPane.addTab("Query", querryPane);
+		tabbedPane.addTab("Chart", scrollPaneChart);
 
 		if (selectedIndex == -1 || newQuerryReceived) {
 			tabbedPane.setSelectedIndex(0);

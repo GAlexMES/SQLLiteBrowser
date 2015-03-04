@@ -36,5 +36,12 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.8.7</version>
 		</dependency>
+		<dependency>
+			<groupId>jchart2d</groupId>
+			<artifactId>com.jchart2d</artifactId>
+			<version>3.2.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jchart2d-3.2.0.jar</systemPath>
+		</dependency>
 	</dependencies>
 </project>

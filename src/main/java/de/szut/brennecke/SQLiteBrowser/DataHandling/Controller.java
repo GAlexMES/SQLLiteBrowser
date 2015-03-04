@@ -1,11 +1,14 @@
 package de.szut.brennecke.SQLiteBrowser.DataHandling;
 
-import java.util.HashMap;
-import java.util.Map;
+import info.monitorenter.gui.chart.Chart2D;
+
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
+import de.szut.brennecke.SQLiteBrowser.GUI.GUIGenerator;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
 
@@ -146,6 +149,10 @@ public class Controller {
 			}
 			wrongQueryFlag = false;
 		}
+	}
+	
+	public void updateChart(Chart2D chart){
+		GUIGenerator.generateChartPane(chart);
 	}
 
 	
