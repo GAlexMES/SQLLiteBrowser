@@ -530,5 +530,4 @@ public class GUIGenerator {
 	public static JTextArea getTextArea() {
 		return textField;
 	}
-
 }

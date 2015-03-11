@@ -52,7 +52,7 @@ public class MenuListener implements ActionListener {
 			int retval = csvFileChooser.showOpenDialog(null);
 			if (retval == JFileChooser.APPROVE_OPTION) {
 				String filePath = csvFileChooser.getSelectedFile().getAbsolutePath();
-					gui.getGUIController().getController().showCSVChart(filePath);
+				gui.getGUIController().getController().showCSVChart(filePath);
 			}
 			break;
 		default:

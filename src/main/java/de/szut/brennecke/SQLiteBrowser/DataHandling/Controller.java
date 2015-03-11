@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import de.szut.brennecke.SQLiteBrowser.GUI.CSVViewer;
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIGenerator;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
@@ -16,13 +21,15 @@ import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
  * 
  * @author Alexander Brennecke
  * 
- * This Class is a Controller Class, which works between the GUIController and the SQLConnections. It handles all open SQLConnections and gives commands to the GUICOntroller.java
+ *         This Class is a Controller Class, which works between the
+ *         GUIController and the SQLConnections. It handles all open
+ *         SQLConnections and gives commands to the GUICOntroller.java
  *
  */
 public class Controller {
-	
-	//INITIALISATION
-	////////////////
+
+	// INITIALISATION
+	// //////////////
 	DatabaseProperties dbProps = new DatabaseProperties();
 	GUIController guiController = new GUIController(this);
 	private String lastShowQuery = "";
@@ -32,10 +39,9 @@ public class Controller {
 	private final int NUMBER_OF_MAX_LIMIT = 999999999;
 	private final String NUMBER_OF_MAX_LIMIT_WARNING = "Da bei einem Offset ein Limit benötigt wird, wurde dies auf '999999999' gesetzt!";
 
-	
-	//IMPORTANT FUNCTIONS
-	/////////////////////
-	
+	// IMPORTANT FUNCTIONS
+	// ///////////////////
+
 	/**
 	 * Opens the GUI main Frame
 	 */
@@ -46,7 +52,9 @@ public class Controller {
 
 	/**
 	 * removes a SQLConnection based on it's name
-	 * @param name of the SQLConnection
+	 * 
+	 * @param name
+	 *            of the SQLConnection
 	 */
 	public void removeSQLConnection(String name) {
 		sqlConnections.remove(name);
@@ -56,8 +64,11 @@ public class Controller {
 
 	/**
 	 * Adds a SQLConnection to the stack
-	 * @param filePath to the db file
-	 * @throws SQLFileNotFoundException when path is incorrect
+	 * 
+	 * @param filePath
+	 *            to the db file
+	 * @throws SQLFileNotFoundException
+	 *             when path is incorrect
 	 */
 	public void addSQLConnection(String filePath) throws SQLFileNotFoundException {
 		String[] nameSplits = filePath.split("\\\\");
@@ -82,10 +93,13 @@ public class Controller {
 	}
 
 	/**
-	 * Says the GUIController to open a table.
-	 * Is usually called, when a JTree Tableobject was clicked.
-	 * @param database name of the database, which includes the table
-	 * @param table name of the table which should be shown
+	 * Says the GUIController to open a table. Is usually called, when a JTree
+	 * Tableobject was clicked.
+	 * 
+	 * @param database
+	 *            name of the database, which includes the table
+	 * @param table
+	 *            name of the table which should be shown
 	 */
 	public void openTable(String database, String table) {
 		SQLConnection sqlCon = sqlConnections.get(database);
@@ -104,8 +118,10 @@ public class Controller {
 	}
 
 	/**
-	 * the query, which is written into the queryTextPane 
-	 * @param limitValues [0] = LIMIT; [1] = OFFSET
+	 * the query, which is written into the queryTextPane
+	 * 
+	 * @param limitValues
+	 *            [0] = LIMIT; [1] = OFFSET
 	 */
 	public void sendGUIQuery(int[] limitValues) {
 		boolean showInfoPane = false;
@@ -129,10 +145,12 @@ public class Controller {
 			GUIController.generateWrongQuerryInfoPane(NUMBER_OF_MAX_LIMIT_WARNING);
 		}
 	}
-	
+
 	/**
 	 * sends a Query to the chosen database
-	 * @param query query statement
+	 * 
+	 * @param query
+	 *            query statement
 	 */
 	public void sendQuery(String query) {
 		String sqlConName = guiController.getChosenDatabase();
@@ -150,15 +168,14 @@ public class Controller {
 			wrongQueryFlag = false;
 		}
 	}
-	
-	public void updateChart(Chart2D chart){
+
+	public void updateChart(Chart2D chart) {
 		GUIGenerator.updateChartPane(chart);
 	}
 
-	
-	//GETTER&SETTER
-	///////////////
-		
+	// GETTER&SETTER
+	// /////////////
+
 	public SQLConnection getSQLConnection(String name) {
 		SQLConnection sqlCon = sqlConnections.get(name);
 		return sqlCon;
@@ -168,12 +185,13 @@ public class Controller {
 		ArrayList<SQLConnection> sqlConnectionsList = new ArrayList<>(sqlConnections.values());
 		return sqlConnectionsList;
 	}
+
 	public void setWrongQueryFlag(Boolean flag) {
 		wrongQueryFlag = flag;
 	}
 
 	public Chart2D generateChart(String name, String selectedTableName, String xValueColoum, String yValueColoum) {
-		String query = "select "+ xValueColoum + ", " + yValueColoum + " from " + selectedTableName;
+		String query = "select " + xValueColoum + ", " + yValueColoum + " from " + selectedTableName;
 		ResultSet result = sqlConnections.get(name).sendQuery(query);
 		ArrayList<Double[]> resultChartValues = ResultWorkup.getChartValues(result);
 		Chart2D retval = ChartDrawer.generateChart(resultChartValues);
@@ -181,9 +199,8 @@ public class Controller {
 	}
 
 	public void showCSVChart(String filePath) {
-		// TODO Auto-generated method stub
-		
+		ArrayList<String[]> values = CSVImporter.read(filePath);
+		CSVViewer csv = new CSVViewer(values);
 	}
-
 
 }
