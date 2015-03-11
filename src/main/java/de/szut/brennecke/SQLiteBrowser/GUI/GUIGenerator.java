@@ -174,7 +174,7 @@ public class GUIGenerator {
 
 		JMenu menuFile = new JMenu("File");
 
-		String[] menuFileItems = { "Open" };
+		String[] menuFileItems = { "Open Database", "Show CSV in chart"};
 		for (String str : menuFileItems) {
 			JMenuItem menuItem = new JMenuItem(str);
 			menuItem.addActionListener(menuListener);

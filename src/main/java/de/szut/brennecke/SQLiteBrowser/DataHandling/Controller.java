@@ -158,8 +158,7 @@ public class Controller {
 	
 	//GETTER&SETTER
 	///////////////
-	
-	
+		
 	public SQLConnection getSQLConnection(String name) {
 		SQLConnection sqlCon = sqlConnections.get(name);
 		return sqlCon;
@@ -179,6 +178,11 @@ public class Controller {
 		ArrayList<Double[]> resultChartValues = ResultWorkup.getChartValues(result);
 		Chart2D retval = ChartDrawer.generateChart(resultChartValues);
 		return retval;
+	}
+
+	public void showCSVChart(String filePath) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

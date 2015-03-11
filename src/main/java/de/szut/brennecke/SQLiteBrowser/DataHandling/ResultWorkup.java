@@ -61,9 +61,7 @@ public class ResultWorkup {
 			while (result.next()) {
 				String xValue = result.getString(1);
 				String yValue = result.getString(2);
-				System.out.println(xValue + "     " + yValue);
 				if (isValueUseful(xValue) && isValueUseful(yValue)) {
-					System.out.println("used!");
 					Double[] row = new Double[2];
 					row[0] = Double.parseDouble(xValue);
 					row[1] = Double.parseDouble(yValue);

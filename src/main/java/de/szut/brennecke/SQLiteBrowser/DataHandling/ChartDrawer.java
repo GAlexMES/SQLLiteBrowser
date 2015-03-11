@@ -1,7 +1,6 @@
 package de.szut.brennecke.SQLiteBrowser.DataHandling;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;
