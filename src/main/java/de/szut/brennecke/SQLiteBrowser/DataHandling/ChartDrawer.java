@@ -17,14 +17,13 @@ public class ChartDrawer {
 		chart.addTrace(trace);
 
 		for (Double[] point:values) {
-			System.out.println("X:"+ point[0] + "Y:" + point[1]);
 			trace.addPoint(point[0],point[1]);
 		}
 		
 		chart.addTrace(trace);
 		
 		return chart;
-		
 	}
+	
 	
 }

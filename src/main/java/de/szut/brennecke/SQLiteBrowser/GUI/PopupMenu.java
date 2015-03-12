@@ -1,6 +1,5 @@
 package de.szut.brennecke.SQLiteBrowser.GUI;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -24,8 +23,6 @@ public class PopupMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Controller controller = gui.getGUIController().getController();
-				Point point = deleteItem.getParent().getLocation();
-				System.out.println(point.getX());
 				controller.removeSQLConnection(nameOfSelectedDatabase);
 			}
 		});
