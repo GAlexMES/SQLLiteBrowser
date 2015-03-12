@@ -234,7 +234,6 @@ public class GUIGenerator {
 		for (SQLConnection sqlCon : sqlCons) {
 			databaseComboBox.addItem(sqlCon.getName());
 		}
-
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 1.0;
 		c.weighty = 0.0;
