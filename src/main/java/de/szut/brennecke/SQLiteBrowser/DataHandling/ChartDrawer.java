@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.ITrace2D;
 import info.monitorenter.gui.chart.traces.Trace2DSimple;
+import info.monitorenter.gui.chart.traces.painters.TracePainterDisc;
 import info.monitorenter.gui.chart.traces.painters.TracePainterLine;
 import info.monitorenter.gui.chart.traces.painters.TracePainterVerticalBar;
 
@@ -15,6 +16,7 @@ public class ChartDrawer {
 	
 	public final static int LINE_CHART = 0;
 	public final static int BAR_CHART = 1;
+	public final static int DISC_CHART = 2;
 	
 	
 	public static Chart2D generateChart(ArrayList<Double[]> values, int chartType){
@@ -25,6 +27,9 @@ public class ChartDrawer {
 		switch(chartType){
 		case BAR_CHART:
 			trace.setTracePainter(new TracePainterVerticalBar(4, chart));
+			break;
+		case DISC_CHART:
+			trace.setTracePainter(new TracePainterDisc());
 			break;
 		case LINE_CHART:
 		default:

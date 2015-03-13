@@ -45,6 +45,7 @@ public class CSVViewer extends JFrame {
 	private JButton showChart;
 	private JRadioButton lineChartButton;
 	private JRadioButton barChartButton;
+	private JRadioButton discChartButton;
 	private ButtonGroup chartViewSelection;
 	
 
@@ -68,10 +69,15 @@ public class CSVViewer extends JFrame {
 		
 		barChartButton = new JRadioButton("show as Bar Chart");
 		barChartButton.setActionCommand(String.valueOf(ChartDrawer.BAR_CHART));
+		
+		discChartButton = new JRadioButton("show as disc Chart");
+		discChartButton.setActionCommand(String.valueOf(ChartDrawer.DISC_CHART));
+		
 		chartViewSelection = new ButtonGroup();
 		
 		chartViewSelection.add(lineChartButton);
 		chartViewSelection.add(barChartButton);
+		chartViewSelection.add(discChartButton);
 		
 	}
 
@@ -148,7 +154,7 @@ public class CSVViewer extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.8;
 		c.weighty = 1.0;
-		c.gridheight = 7;
+		c.gridheight = 8;
 		c.gridx = 0;
 		c.gridy = 0;
 
@@ -196,8 +202,11 @@ public class CSVViewer extends JFrame {
 		
 		c.gridy = 5;
 		this.add(barChartButton,c);
-
+		
 		c.gridy = 6;
+		this.add(discChartButton,c);
+
+		c.gridy = 7;
 		if (axis.get("x") != null && axis.get("y") != null) {
 			showChart.setEnabled(true);
 		}
