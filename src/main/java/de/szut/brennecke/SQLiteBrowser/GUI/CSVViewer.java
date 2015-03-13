@@ -28,6 +28,11 @@ import javax.swing.table.DefaultTableModel;
 import de.szut.brennecke.SQLiteBrowser.DataHandling.ChartDrawer;
 import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 
+/**
+ * This Class displays a .csv file in a JTable
+ * @author Alexander Brennecke
+ *
+ */
 @SuppressWarnings("serial")
 public class CSVViewer extends JFrame {
 
