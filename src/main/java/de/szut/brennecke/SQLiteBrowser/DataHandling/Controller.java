@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import de.szut.brennecke.SQLiteBrowser.GUI.CSVViewer;
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
@@ -194,13 +191,14 @@ public class Controller {
 		String query = "select " + xValueColoum + ", " + yValueColoum + " from " + selectedTableName;
 		ResultSet result = sqlConnections.get(name).sendQuery(query);
 		ArrayList<Double[]> resultChartValues = ResultWorkup.getChartValues(result);
-		Chart2D retval = ChartDrawer.generateChart(resultChartValues);
+		Chart2D retval = ChartDrawer.generateChart(resultChartValues, ChartDrawer.LINE_CHART);
 		return retval;
 	}
 
 	public void showCSVChart(String filePath) {
 		ArrayList<String[]> values = CSVImporter.read(filePath);
-		CSVViewer csv = new CSVViewer(values);
+		CSVViewer csvViewer = new CSVViewer();
+		csvViewer.displayValues(values);
 	}
 
 }

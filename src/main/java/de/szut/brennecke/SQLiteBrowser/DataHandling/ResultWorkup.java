@@ -5,7 +5,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -82,7 +81,6 @@ public class ResultWorkup {
 	public static ArrayList<Double[]> getChartValues(JTable table, Map<String, Integer> axis) {
 		ArrayList<Double[]> retval = new ArrayList<>();
 		
-		Set<String> axisKeys = axis.keySet();
 		int rowCounter = table.getRowCount();
 
 		for (int row = 0; row < rowCounter; row++) {
@@ -93,23 +91,6 @@ public class ResultWorkup {
 			rowValue[1] = Double.parseDouble(yValue);
 			retval.add(rowValue);
 		}
-		
-		
-//		try {
-//			while (result.next()) {
-//				String xValue = result.getString(1);
-//				String yValue = result.getString(2);
-//				if (isValueUseful(xValue) && isValueUseful(yValue)) {
-//					Double[] row = new Double[2];
-//					row[0] = Double.parseDouble(xValue);
-//					row[1] = Double.parseDouble(yValue);
-//					retval.add(row);
-//				}
-//
-//			}
-//		} catch (NumberFormatException | SQLException e) {
-//			
-//		}
 
 		return retval;
 	}

@@ -1,10 +1,6 @@
 package de.szut.brennecke.SQLiteBrowser.GUI;
 
-import java.util.ArrayList;
-
 import javax.swing.JFrame;
-
-import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
 /**
  * This class is the main frame class. It is the parent of all awt object used in this software.

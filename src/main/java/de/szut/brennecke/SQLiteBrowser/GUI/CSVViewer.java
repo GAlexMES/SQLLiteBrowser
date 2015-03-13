@@ -13,13 +13,14 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -37,15 +38,36 @@ public class CSVViewer extends JFrame {
 	private JLabel xAxisLabel;
 	private JLabel yAxisLabel;
 	private JButton showChart;
+	private JRadioButton lineChartButton;
+	private JRadioButton barChartButton;
+	private ButtonGroup chartViewSelection;
+	
 
-	public CSVViewer(ArrayList<String[]> values) {
-		this.values = values;
+	public CSVViewer() {
 		xAxisLabel = new JLabel();
 		yAxisLabel = new JLabel();
 		showChart = new JButton("Draw Chart!");
 		showChart.setEnabled(false);
 		c = new GridBagConstraints();
+	}
+	
+	public void displayValues(ArrayList<String[]> values){
+		this.values = values;
 		initGeneration();
+	}
+	
+	private void generateRadioButtons(){
+		lineChartButton = new JRadioButton("show as Line Chart");
+		lineChartButton.setActionCommand(String.valueOf(ChartDrawer.LINE_CHART));
+		lineChartButton.setSelected(true);
+		
+		barChartButton = new JRadioButton("show as Bar Chart");
+		barChartButton.setActionCommand(String.valueOf(ChartDrawer.BAR_CHART));
+		chartViewSelection = new ButtonGroup();
+		
+		chartViewSelection.add(lineChartButton);
+		chartViewSelection.add(barChartButton);
+		
 	}
 
 	private void initGeneration() {
@@ -54,13 +76,16 @@ public class CSVViewer extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Double[]> values = ResultWorkup.getChartValues(table, axis);
-				Chart2D chart = ChartDrawer.generateChart(values);
-				CSVChartViewer csvChartViewer = new CSVChartViewer(chart);
+				String actionCommand = chartViewSelection.getSelection().getActionCommand();
+				Chart2D chart = ChartDrawer.generateChart(values, Integer.valueOf(actionCommand));
+				CSVChartViewer csvChartViewer = new CSVChartViewer();
+				csvChartViewer.display(chart);
 			}
 		});
 
 		defineFrame();
 		generateTable();
+		generateRadioButtons();
 		updateSelection();
 	}
 
@@ -118,7 +143,7 @@ public class CSVViewer extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 0.8;
 		c.weighty = 1.0;
-		c.gridheight = 3;
+		c.gridheight = 7;
 		c.gridx = 0;
 		c.gridy = 0;
 
@@ -133,7 +158,12 @@ public class CSVViewer extends JFrame {
 		c.gridx = 1;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.PAGE_END;
-
+		
+		JLabel info = new JLabel("Your selected coloums:");
+		this.add(info,c);
+		
+		c.gridy = 1;
+		
 		if (axis.get("x") != null) {
 			xAxisLabel.setText("X-Axis: " + table.getColumnName(axis.get("x")));
 		} else {
@@ -141,7 +171,7 @@ public class CSVViewer extends JFrame {
 		}
 		this.add(xAxisLabel, c);
 
-		c.gridy = 1;
+		c.gridy = 2;
 
 		if (axis.get("y") != null) {
 			yAxisLabel.setText("Y-Axis: " + table.getColumnName(axis.get("y")));
@@ -151,8 +181,18 @@ public class CSVViewer extends JFrame {
 
 		this.add(yAxisLabel, c);
 
-		c.gridy = 2;
+		c.gridy = 3;
+		JLabel chartSelectionInfo = new JLabel("Type of chart:");
+		
+		this.add(chartSelectionInfo,c);
+		
+		c.gridy = 4;
+		this.add(lineChartButton,c);
+		
+		c.gridy = 5;
+		this.add(barChartButton,c);
 
+		c.gridy = 6;
 		if (axis.get("x") != null && axis.get("y") != null) {
 			showChart.setEnabled(true);
 		}
