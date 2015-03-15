@@ -30,6 +30,7 @@ import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 
 /**
  * This Class displays a .csv file in a JTable
+ * 
  * @author Alexander Brennecke
  *
  */
@@ -47,7 +48,6 @@ public class CSVViewer extends JFrame {
 	private JRadioButton barChartButton;
 	private JRadioButton discChartButton;
 	private ButtonGroup chartViewSelection;
-	
 
 	public CSVViewer() {
 		xAxisLabel = new JLabel();
@@ -56,29 +56,29 @@ public class CSVViewer extends JFrame {
 		showChart.setEnabled(false);
 		c = new GridBagConstraints();
 	}
-	
-	public void displayValues(ArrayList<String[]> values){
+
+	public void displayValues(ArrayList<String[]> values) {
 		this.values = values;
 		initGeneration();
 	}
-	
-	private void generateRadioButtons(){
+
+	private void generateRadioButtons() {
 		lineChartButton = new JRadioButton("show as Line Chart");
 		lineChartButton.setActionCommand(String.valueOf(ChartDrawer.LINE_CHART));
 		lineChartButton.setSelected(true);
-		
+
 		barChartButton = new JRadioButton("show as Bar Chart");
 		barChartButton.setActionCommand(String.valueOf(ChartDrawer.BAR_CHART));
-		
+
 		discChartButton = new JRadioButton("show as disc Chart");
 		discChartButton.setActionCommand(String.valueOf(ChartDrawer.DISC_CHART));
-		
+
 		chartViewSelection = new ButtonGroup();
-		
+
 		chartViewSelection.add(lineChartButton);
 		chartViewSelection.add(barChartButton);
 		chartViewSelection.add(discChartButton);
-		
+
 	}
 
 	private void initGeneration() {
@@ -105,7 +105,7 @@ public class CSVViewer extends JFrame {
 		this.setLayout(new GridBagLayout());
 		this.setVisible(true);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 	}
 
 	private void generateTable() {
@@ -169,12 +169,12 @@ public class CSVViewer extends JFrame {
 		c.gridx = 1;
 		c.gridy = 0;
 		c.anchor = GridBagConstraints.PAGE_END;
-		
+
 		JLabel info = new JLabel("Your selected coloums:");
-		this.add(info,c);
-		
+		this.add(info, c);
+
 		c.gridy = 1;
-		
+
 		if (axis.get("x") != null) {
 			xAxisLabel.setText("X-Axis: " + table.getColumnName(axis.get("x")));
 		} else {
@@ -194,17 +194,17 @@ public class CSVViewer extends JFrame {
 
 		c.gridy = 3;
 		JLabel chartSelectionInfo = new JLabel("Type of chart:");
-		
-		this.add(chartSelectionInfo,c);
-		
+
+		this.add(chartSelectionInfo, c);
+
 		c.gridy = 4;
-		this.add(lineChartButton,c);
-		
+		this.add(lineChartButton, c);
+
 		c.gridy = 5;
-		this.add(barChartButton,c);
-		
+		this.add(barChartButton, c);
+
 		c.gridy = 6;
-		this.add(discChartButton,c);
+		this.add(discChartButton, c);
 
 		c.gridy = 7;
 		if (axis.get("x") != null && axis.get("y") != null) {

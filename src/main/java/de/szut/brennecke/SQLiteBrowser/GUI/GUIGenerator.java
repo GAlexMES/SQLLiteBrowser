@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -21,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -31,6 +33,7 @@ import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import de.szut.brennecke.SQLiteBrowser.DataHandling.ChartDrawer;
 import de.szut.brennecke.SQLiteBrowser.DataHandling.ResultWorkup;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
@@ -63,6 +66,10 @@ public class GUIGenerator {
 	private static JComboBox<String> yValueChartComboBox;
 	private static SQLConnection selectedConnection;
 	private static JButton showChartButton;
+	private static JRadioButton lineChartButton;
+	private static JRadioButton barChartButton;
+	private static JRadioButton discChartButton;
+	private static ButtonGroup chartViewSelection;
 
 	private static String selectedTableName;
 
@@ -397,7 +404,9 @@ public class GUIGenerator {
 				if (xValueCounter > 0 && yValueCounter > 0) {
 					String xValueColoum = xValueChartComboBox.getSelectedItem().toString();
 					String yValueColoum = yValueChartComboBox.getSelectedItem().toString();
-					controller.generateChart(selectedConnection.getName(), selectedTableName, xValueColoum, yValueColoum);
+					
+					String chartSelection = chartViewSelection.getSelection().getActionCommand();
+					controller.generateChart(selectedConnection.getName(), selectedTableName, xValueColoum, yValueColoum, Integer.valueOf(chartSelection));
 				}
 			}
 		});
@@ -409,6 +418,7 @@ public class GUIGenerator {
 			databaseChartComboBox.addItem(sqlCon.getName());
 		}
 		generateChartPaneListeners(controller);
+		generateRadioButtons();
 		chartPane = new JPanel();
 		chartPane.setLayout(new GridBagLayout());
 
@@ -448,11 +458,41 @@ public class GUIGenerator {
 
 		c.gridy = 7;
 		chartPane.add(yValueChartComboBox, c);
-
+		
 		c.gridy = 8;
+		chartPane.add(lineChartButton, c);
+		
+		c.gridy = 9;
+		chartPane.add(barChartButton, c);
+		
+		c.gridy = 10;
+		chartPane.add(discChartButton, c);
+		
+		c.gridy = 11;
 		chartPane.add(showChartButton, c);
 	}
 
+	
+	private static void generateRadioButtons() {
+		lineChartButton = new JRadioButton("show as Line Chart");
+		lineChartButton.setActionCommand(String.valueOf(ChartDrawer.LINE_CHART));
+		lineChartButton.setSelected(true);
+
+		barChartButton = new JRadioButton("show as Bar Chart");
+		barChartButton.setActionCommand(String.valueOf(ChartDrawer.BAR_CHART));
+
+		discChartButton = new JRadioButton("show as disc Chart");
+		discChartButton.setActionCommand(String.valueOf(ChartDrawer.DISC_CHART));
+
+		chartViewSelection = new ButtonGroup();
+
+		chartViewSelection.add(lineChartButton);
+		chartViewSelection.add(barChartButton);
+		chartViewSelection.add(discChartButton);
+
+	}
+	
+	
 	public static void updateChartPane(Chart2D chart) {
 		Component[] components = chartPane.getComponents();
 		for(Component component:components){

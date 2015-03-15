@@ -112,8 +112,8 @@ public class GUIController {
 		GUIGenerator.showQuery(gui, rs);
 	}
 
-	public void generateChart(String name, String selectedTableName, String xValueColoum, String yValueColoum) {
-		Chart2D chart = controller.generateChart(name, selectedTableName,xValueColoum, yValueColoum);
+	public void generateChart(String name, String selectedTableName, String xValueColoum, String yValueColoum, int buttonType) {
+		Chart2D chart = controller.generateChart(name, selectedTableName,xValueColoum, yValueColoum, buttonType);
 		GUIGenerator.updateChartPane(chart);
 	}
 	
