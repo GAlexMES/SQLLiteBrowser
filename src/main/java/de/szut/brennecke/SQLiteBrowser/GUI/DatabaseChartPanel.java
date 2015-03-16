@@ -25,11 +25,16 @@ import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 
 public class DatabaseChartPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private GUI parentFrame;
-	private JComboBox databaseChartComboBox;
-	private JComboBox tableChartComboBox;
-	private JComboBox xValueChartComboBox;
-	private JComboBox yValueChartComboBox;
+	private JComboBox<String> databaseChartComboBox;
+	private JComboBox<String> tableChartComboBox;
+	private JComboBox<String> xValueChartComboBox;
+	private JComboBox<String> yValueChartComboBox;
 	private JButton showChartButton;
 	private static JRadioButton lineChartButton;
 	private static JRadioButton barChartButton;

@@ -3,7 +3,6 @@ package de.szut.brennecke.SQLiteBrowser.GUI;
 import info.monitorenter.gui.chart.Chart2D;
 import info.monitorenter.gui.chart.views.ChartPanel;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

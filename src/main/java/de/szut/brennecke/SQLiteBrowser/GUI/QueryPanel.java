@@ -22,7 +22,7 @@ import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 public class QueryPanel extends JPanel{
 	private JTextArea textField;
 	private GUI parentFrame;
-	private JComboBox databaseComboBox;
+	private JComboBox<String> databaseComboBox;
 	private final String WRONG_LIMIT_INPUT = "Falsche Eingabe im Limit Feld. Diese wird ignoriert!";
 	private final String WRONG_OFFSET_INPUT = "Falsche Eingabe im Offset Feld. Diese wird ignoriert!";
 
