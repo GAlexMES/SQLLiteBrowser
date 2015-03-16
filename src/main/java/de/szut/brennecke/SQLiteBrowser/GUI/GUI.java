@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
@@ -34,10 +35,11 @@ public class GUI extends JFrame {
 	private JTabbedPane tabbedPane;
 
 	private Map<String, Component> tabbedComponents;
-	
+
 	private final String TABLE = "Table";
 	private final String QUERY = "Query";
 	private final String DATABASE_CHART = "Chart";
+	private final String LAST_OPENED = "Last Opened";
 
 	// IMPORTANT FUNCTIONS
 	// ///////////////////
@@ -63,7 +65,7 @@ public class GUI extends JFrame {
 		tabbedComponents.put(DATABASE_CHART, new DatabaseChartPanel(this));
 
 		tabbedPane = new JTabbedPane();
-		updateTabbedPane();
+		updateTabbedPane(TABLE);
 
 		mainSplit = new JSplitPane();
 		mainSplit.setLeftComponent(databaseTree);
@@ -103,23 +105,23 @@ public class GUI extends JFrame {
 
 	public void showQuery(ResultSet rs) {
 		((DatabaseTablePanel) tabbedComponents.get(TABLE)).updateTable(rs);
-		updateAll();
+		updateAll(TABLE);
 	}
 
 	public void updateChartPane(Chart2D chart) {
 		((DatabaseChartPanel) tabbedComponents.get(DATABASE_CHART)).updateChartPane(chart);
-		updateAll();
+		updateAll(DATABASE_CHART);
 	}
 
 	public void updateGUI(ArrayList<SQLConnection> sqlConnections) {
 		((QueryPanel) tabbedComponents.get(QUERY)).updateComboBoxes(sqlConnections);
 		((DatabaseChartPanel) tabbedComponents.get(DATABASE_CHART)).updateComboBoxes(sqlConnections);
 		databaseTree.update(sqlConnections);
-		updateAll();
+		updateAll(LAST_OPENED);
 	}
 
-	private void updateAll() {
-		updateTabbedPane();
+	private void updateAll(String openTabbed) {
+		updateTabbedPane(openTabbed);
 		updateMainSplit();
 		this.setContentPane(mainSplit);
 		this.validate();
@@ -130,15 +132,31 @@ public class GUI extends JFrame {
 		mainSplit.setLeftComponent(databaseTree);
 	}
 
-	private void updateTabbedPane() {
+	private void updateTabbedPane(String openTab) {
+		int currentOpenTab = tabbedPane.getSelectedIndex();
+		Set<String> keySet = tabbedComponents.keySet();
 		tabbedPane.removeAll();
-		for (String key : tabbedComponents.keySet()) {
+		for (String key : keySet) {
 			if (key.equals(TABLE)) {
-				tabbedPane.add(key, ((DatabaseTablePanel)tabbedComponents.get(key)).getPane());
+				tabbedPane.add(key, ((DatabaseTablePanel) tabbedComponents.get(key)).getPane());
+			} else {
+				tabbedPane.add(key, tabbedComponents.get(key));
 			}
-			else{
-				tabbedPane.add(key,tabbedComponents.get(key));
-			}
+		}
+
+		switch (openTab) {
+		case TABLE:
+			tabbedPane.setSelectedIndex(0);
+			break;
+		case QUERY:
+			tabbedPane.setSelectedIndex(1);
+			break;
+		case DATABASE_CHART:
+			tabbedPane.setSelectedIndex(2);
+			break;
+		case LAST_OPENED:
+			tabbedPane.setSelectedIndex(currentOpenTab);
+			break;
 		}
 	}
 
