@@ -37,6 +37,7 @@ public class GUI extends JFrame {
 	
 	private final String TABLE = "Table";
 	private final String QUERY = "Query";
+	private final String DATABASE_CHART = "Chart";
 
 	// IMPORTANT FUNCTIONS
 	// ///////////////////
@@ -59,6 +60,7 @@ public class GUI extends JFrame {
 		tabbedComponents = new HashMap<>();
 		tabbedComponents.put(QUERY, new QueryPanel(this));
 		tabbedComponents.put(TABLE, new DatabaseTablePanel(this));
+		tabbedComponents.put(DATABASE_CHART, new DatabaseChartPanel(this));
 
 		tabbedPane = new JTabbedPane();
 		updateTabbedPane();
@@ -105,12 +107,13 @@ public class GUI extends JFrame {
 	}
 
 	public void updateChartPane(Chart2D chart) {
-		// TODO Auto-generated method stub
-
+		((DatabaseChartPanel) tabbedComponents.get(DATABASE_CHART)).updateChartPane(chart);
+		updateAll();
 	}
 
 	public void updateGUI(ArrayList<SQLConnection> sqlConnections) {
 		((QueryPanel) tabbedComponents.get(QUERY)).updateComboBoxes(sqlConnections);
+		((DatabaseChartPanel) tabbedComponents.get(DATABASE_CHART)).updateComboBoxes(sqlConnections);
 		databaseTree.update(sqlConnections);
 		updateAll();
 	}
