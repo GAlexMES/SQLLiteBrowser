@@ -167,7 +167,7 @@ public class Controller {
 	}
 
 	public void updateChart(Chart2D chart) {
-		GUIGenerator.updateChartPane(chart);
+		guiController.updateChartPane(chart);
 	}
 
 	// GETTER&SETTER
