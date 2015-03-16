@@ -1,4 +1,4 @@
-package de.szut.brennecke.SQLiteBrowser.SQLiteBrowser;
+package de.szut.brennecke.SQLiteBrowser;
 
 import de.szut.brennecke.SQLiteBrowser.DataHandling.Controller;
 

@@ -35,16 +35,24 @@ public class MenuListener implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		String itemText = ((JMenuItem) arg0.getSource()).getText();
 		switch (itemText) {
-		case "Open":
-			final JFileChooser fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(null);
+		case "Open Database":
+			final JFileChooser dbFileChooser = new JFileChooser();
+			int returnValue = dbFileChooser.showOpenDialog(null);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+				String filePath = dbFileChooser.getSelectedFile().getAbsolutePath();
 				try {
 					gui.getGUIController().getController().addSQLConnection(filePath);
 				} catch (SQLFileNotFoundException e) {
 					e.printStackTrace();
 				}
+			}
+			break;
+		case "Show CSV in chart":
+			final JFileChooser csvFileChooser = new JFileChooser();
+			int retval = csvFileChooser.showOpenDialog(null);
+			if (retval == JFileChooser.APPROVE_OPTION) {
+				String filePath = csvFileChooser.getSelectedFile().getAbsolutePath();
+				gui.getGUIController().getController().showCSVChart(filePath);
 			}
 			break;
 		default:

@@ -63,7 +63,6 @@ public class GUIController {
 	 * @param list of database paths
 	 */
 	public void startGUI(List<String> list) {
-		gui.generateEmptyGUI();
 		if (!list.isEmpty() && !list.equals(null)) {
 			for (String dbPath : list) {
 				try {
@@ -90,7 +89,7 @@ public class GUIController {
 	 * @param sqlConnections
 	 */
 	public void updateGUI(ArrayList<SQLConnection> sqlConnections) {
-		GUIGenerator.updateGUI(gui, sqlConnections);
+		gui.updateGUI(sqlConnections);
 
 	}
 
@@ -109,12 +108,16 @@ public class GUIController {
 	}
 
 	public void showQuery(ResultSet rs) {
-		GUIGenerator.showQuery(gui, rs);
+		gui.showQuery(rs);
 	}
 
-	public void generateChart(String name, String selectedTableName, String xValueColoum, String yValueColoum) {
-		Chart2D chart = controller.generateChart(name, selectedTableName,xValueColoum, yValueColoum);
-		GUIGenerator.updateChartPane(chart);
+	public void generateChart(String name, String selectedTableName, String xValueColoum, String yValueColoum, int buttonType) {
+		Chart2D chart = controller.generateChart(name, selectedTableName,xValueColoum, yValueColoum, buttonType);
+		gui.updateChartPane(chart);
+	}
+
+	public void updateChartPane(Chart2D chart) {
+		gui.updateChartPane(chart);
 	}
 	
 }
