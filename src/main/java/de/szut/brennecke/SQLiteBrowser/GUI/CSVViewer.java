@@ -1,6 +1,7 @@
 package de.szut.brennecke.SQLiteBrowser.GUI;
 
 import info.monitorenter.gui.chart.Chart2D;
+import info.monitorenter.gui.chart.views.ChartPanel;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -89,8 +90,7 @@ public class CSVViewer extends JFrame {
 				ArrayList<Double[]> values = ResultWorkup.getChartValues(table, axis);
 				String actionCommand = chartViewSelection.getSelection().getActionCommand();
 				Chart2D chart = ChartDrawer.generateChart(values, Integer.valueOf(actionCommand));
-				CSVChartViewer csvChartViewer = new CSVChartViewer();
-				csvChartViewer.display(chart);
+				showChart(chart);
 			}
 		});
 
@@ -215,5 +215,15 @@ public class CSVViewer extends JFrame {
 
 		this.validate();
 		this.repaint();
+	}
+	
+	private void showChart(Chart2D chart){
+		JFrame chartFrame = new JFrame();
+		chartFrame.setVisible(true);
+		chartFrame.setSize(500, 500);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		chartFrame.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+		ChartPanel chartPanel = new ChartPanel(chart);
+		chartFrame.add(chartPanel);
 	}
 }

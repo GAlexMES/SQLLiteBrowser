@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import de.szut.brennecke.SQLiteBrowser.GUI.CSVViewer;
 import de.szut.brennecke.SQLiteBrowser.GUI.GUIController;
-import de.szut.brennecke.SQLiteBrowser.GUI.GUIGenerator;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLConnection;
 import de.szut.brennecke.SQLiteBrowser.SQL.SQLFileNotFoundException;
 
@@ -167,7 +165,7 @@ public class Controller {
 	}
 
 	public void updateChart(Chart2D chart) {
-		GUIGenerator.updateChartPane(chart);
+		guiController.updateChartPane(chart);
 	}
 
 	// GETTER&SETTER
@@ -179,7 +177,12 @@ public class Controller {
 	}
 
 	public ArrayList<SQLConnection> getSqlConnections() {
-		ArrayList<SQLConnection> sqlConnectionsList = new ArrayList<>(sqlConnections.values());
+		ArrayList<SQLConnection> sqlConnectionsList;
+		try {
+			sqlConnectionsList = new ArrayList<>(sqlConnections.values());
+		} catch (NullPointerException npe) {
+			return null;
+		}
 		return sqlConnectionsList;
 	}
 
